@@ -1,0 +1,418 @@
+.courier-registration-container {
+    height: 100vh;
+    background: linear-gradient(135deg, #0ead9810, #fbb03b10);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.courier-registration-container .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Progress Steps */
+.registration-progress {
+    position: sticky;
+    top: 64px;
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 50;
+}
+
+.progress-bar {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.progress-step {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.3s;
+}
+
+.progress-step.active {
+    background: var(--primary);
+    color: white;
+}
+
+.progress-step.completed {
+    background: #10b981;
+    color: white;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+.progress-labels span {
+    flex: 1;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.progress-labels span.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Registration Step */
+.registration-step {
+    padding: 24px;
+}
+
+.registration-step h2 {
+    font-size: 22px;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.step-description {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 24px 0;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(14, 173, 152, 0.1);
+}
+
+/* Vehicle Selector */
+.vehicle-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.vehicle-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.vehicle-option:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.vehicle-option.active {
+    background: linear-gradient(135deg, rgba(14, 173, 152, 0.1), rgba(251, 176, 59, 0.1));
+    border-color: var(--primary);
+    border-width: 2px;
+}
+
+.vehicle-option span {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Upload Grid */
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.upload-box {
+    position: relative;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 12px;
+    background: white;
+    border: 2px dashed rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 140px;
+}
+
+.upload-label:hover {
+    border-color: var(--primary);
+    background: rgba(14, 173, 152, 0.05);
+}
+
+.upload-label.uploaded {
+    border-color: #10b981;
+    border-style: solid;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.upload-label span {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.uploaded-text {
+    color: #10b981 !important;
+    font-weight: 600;
+}
+
+/* Info Box */
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(251, 176, 59, 0.1);
+    border-left: 3px solid #fbb03b;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.info-box span {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.info-box.success {
+    background: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+}
+
+.info-box.success strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.info-box.success p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Zone List */
+.zone-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.zone-card {
+    padding: 16px;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.zone-card:hover {
+    border-color: var(--primary);
+}
+
+.zone-card.selected {
+    background: linear-gradient(135deg, rgba(14, 173, 152, 0.1), rgba(251, 176, 59, 0.1));
+    border-color: var(--primary);
+}
+
+.zone-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.zone-header h4 {
+    flex: 1;
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.zone-districts {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 32px;
+}
+
+/* Availability Options */
+.availability-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.availability-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 16px;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.availability-option span {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.availability-option:hover {
+    border-color: var(--primary);
+}
+
+.availability-option.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.availability-option.active span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Review Section */
+.review-section {
+    margin-bottom: 16px;
+    padding: 16px;
+}
+
+.review-section h3 {
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    color: var(--text-primary);
+}
+
+.review-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-item span {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.review-item strong {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.review-zone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+/* Footer */
+.registration-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 100;
+}
+
+.registration-footer button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.registration-footer button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

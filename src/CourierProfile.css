@@ -1,0 +1,435 @@
+.courier-profile-container {
+    height: 100vh;
+    background: linear-gradient(135deg, #0ead9810, #fbb03b10);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.courier-profile-container .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    margin: 16px;
+    align-items: center;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(14, 173, 152, 0.1), rgba(251, 176, 59, 0.1));
+    border: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.profile-name-row h2 {
+    font-size: 20px;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.level-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Level Progress Card */
+.level-progress-card {
+    margin: 0 16px 16px 16px;
+    padding: 20px;
+}
+
+.level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.level-current {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.level-badge-large {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.level-current h3 {
+    font-size: 18px;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.level-current p {
+    font-size: 13px;
+    margin: 4px 0 0 0;
+    color: var(--text-muted);
+}
+
+.level-next {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
+
+.next-level-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.next-badge {
+    font-size: 20px;
+}
+
+.xp-bar {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.xp-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Stats Overview */
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+}
+
+.stat-box .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-box .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Tabs */
+.profile-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.profile-tabs .tab {
+    flex: 1;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-tabs .tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Tab Content */
+.tab-content {
+    padding: 0 16px;
+}
+
+/* Stats Card */
+.stats-card {
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.stats-card h3 {
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    color: var(--text-primary);
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-item .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.stat-item .stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.highlight-item:last-child {
+    border-bottom: none;
+}
+
+.highlight-item div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
+
+.highlight-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.highlight-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.zone-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.zone-item:last-child {
+    border-bottom: none;
+}
+
+/* Badges Grid */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.badge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+}
+
+.badge-card.locked {
+    opacity: 0.5;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.badge-icon {
+    font-size: 48px;
+    margin-bottom: 4px;
+}
+
+.badge-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.badge-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.badge-date {
+    font-size: 11px;
+    color: var(--primary);
+    margin-top: 4px;
+}
+
+.badge-locked {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Quest Card */
+.quest-card {
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.quest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.quest-header h4 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.quest-reward {
+    padding: 4px 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.quest-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 12px 0;
+}
+
+.quest-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.quest-progress .progress-bar {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quest-progress .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #10b981);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.quest-progress .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.quest-progress .progress-text span:first-child {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.quest-timer {
+    color: var(--text-muted);
+}
+
+.quest-info {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    align-items: flex-start;
+    background: rgba(14, 173, 152, 0.05);
+    border-left: 3px solid var(--primary);
+}
+
+.quest-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}

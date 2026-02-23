@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">palugada_kw</string>
+    <string name="title_activity_main">palugada_kw</string>
+    <string name="package_name">com.palugada.app</string>
+    <string name="custom_url_scheme">com.palugada.app</string>
+</resources>

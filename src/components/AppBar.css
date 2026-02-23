@@ -1,0 +1,54 @@
+.common-appbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 450px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.common-appbar-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-main);
+    padding: 8px;
+    margin-left: -8px;
+    /* Negative margin to align with padding */
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.common-appbar-back:active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.common-appbar-title {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    /* Make sure title stays centered even with back button on left */
+    margin-right: 32px;
+    /* Counter-balance the back button width approx */
+}
+
+/* Optional right icon area */
+.common-appbar-right {
+    position: absolute;
+    right: 16px;
+    display: flex;
+    align-items: center;
+}

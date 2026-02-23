@@ -1,82 +1,82 @@
 # PalugadaApp - React Native (Capacitor)
 
-PalugadaApp is a comprehensive multi-role marketplace platform designed for high performance and visual excellence. Built with React, Vite, and Capacitor, it offers a seamless experience for Users, Sellers, and Couriers.
+PalugadaApp adalah platform marketplace multi-role komprehensif yang dirancang untuk performa tinggi dan keunggulan visual. Dibangun dengan React, Vite, dan Capacitor, aplikasi ini menawarkan pengalaman yang mulus bagi Pengguna, Penjual, dan Kurir.
 
-## 🚀 Key Features
+## 🚀 Fitur Utama
 
-### 🛒 For Customers
-- **Explore & Search:** Find products across various categories with a modern interface.
-- **Cart & Checkout:** Smooth shopping flow from item selection to payment.
-- **Order Tracking:** Real-time tracking of orders using Leaflet maps.
-- **Favorites:** Save your favorite items for later.
+### 🛒 Untuk Pelanggan
+- **Jelajah & Cari:** Temukan produk di berbagai kategori dengan antarmuka modern.
+- **Keranjang & Checkout:** Alur belanja yang lancar dari pemilihan item hingga pembayaran.
+- **Pelacakan Pesanan:** Pelacakan pesanan secara real-time menggunakan peta Leaflet.
+- **Favorit:** Simpan item favorit Anda untuk nanti.
 
-### 🏪 For Sellers
-- **Seller Dashboard:** Manage products, track sales, and oversee store performance.
-- **Product Management:** Easily add and edit product listings.
-- **Store Registration:** Onboarding flow for new sellers.
+### 🏪 Untuk Penjual
+- **Dashboard Penjual:** Kelola produk, lacak penjualan, dan awasi performa toko.
+- **Manajemen Produk:** Tambah dan edit daftar produk dengan mudah.
+- **Registrasi Toko:** Alur pendaftaran bagi penjual baru.
 
-### 🛵 For Couriers
-- **Courier Dashboard:** View available delivery tasks and earnings.
-- **Earnings Tracking:** Monitor daily/weekly performance and withdrawals.
-- **Community Hub:** Interaction space for courier community.
+### 🛵 Untuk Kurir
+- **Dashboard Kurir:** Lihat tugas pengiriman yang tersedia dan penghasilan.
+- **Pelacakan Penghasilan:** Pantau performa harian/mingguan dan penarikan dana.
+- **Hub Komunitas:** Ruang interaksi bagi komunitas kurir.
 
-### 💳 Financial System
-- **Integrated Wallet:** Top-up, withdraw, and track transaction history.
-- **Bank Account Management:** Securely manage linked bank accounts.
+### 💳 Sistem Keuangan
+- **Dompet Terintegrasi:** Top-up, tarik tunai, dan lacak riwayat transaksi.
+- **Manajemen Rekening Bank:** Kelola rekening bank yang terhubung dengan aman.
 
-### ⚙️ Account & Security
-- **Authentication:** Secure login and registration.
-- **Personal Info Management:** Update profile and contact details.
-- **Location Services:** Precise address management with map integration.
-- **Notification Settings:** Customizable alerts for orders and updates.
+### ⚙️ Akun & Keamanan
+- **Autentikasi:** Login dan registrasi yang aman.
+- **Manajemen Info Pribadi:** Perbarui profil dan detail kontak.
+- **Layanan Lokasi:** Manajemen alamat yang presisi dengan integrasi peta.
+- **Pengaturan Notifikasi:** Peringatan yang dapat disesuaikan untuk pesanan dan pembaruan.
 
 ## 🛠 Tech Stack
 
 - **Frontend:** React 19, Vite
 - **Mobile Foundation:** Capacitor (Android)
-- **Styling:** CSS3 (Glassmorphism & Premium Design)
+- **Styling:** CSS3 (Glassmorphism & Desain Premium)
 - **Icons:** Lucide React
 - **Maps:** Leaflet & React Leaflet
 - **Development:** ESLint
 
-## 📦 Getting Started
+## 📦 Memulai
 
-### Prerequisites
-- Node.js (Latest LTS recommended)
-- Android Studio (for Android builds)
+### Prasyarat
+- Node.js (Edisi LTS terbaru direkomendasikan)
+- Android Studio (untuk build Android)
 
-### Installation
-1. Clone the repository:
+### Instalasi
+1. Clone repositori:
    ```bash
    git clone https://github.com/sesamakita/PalugadaApp_Reactnative.git
    cd PalugadaApp_Reactnative
    ```
-2. Install dependencies:
+2. Instal dependensi:
    ```bash
    npm install
    ```
-3. Run in development mode:
+3. Jalankan dalam mode pengembangan:
    ```bash
    npm run dev
    ```
 
-### Building for Android
-1. Build the production web app:
+### Membangun untuk Android
+1. Build aplikasi web produksi:
    ```bash
    npm run build
    ```
-2. Sync with Capacitor:
+2. Sinkronisasi dengan Capacitor:
    ```bash
    npx cap sync
    ```
-3. Open in Android Studio:
+3. Buka di Android Studio:
    ```bash
    npx cap open android
    ```
 
-## 📄 License
+## 📄 Lisensi
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Didistribusikan di bawah Lisensi MIT. Lihat `LICENSE` untuk informasi lebih lanjut.
 
 ---
-Developed by [sesamakita](https://github.com/sesamakita)
+Dikembangkan oleh [sesamakita](https://github.com/sesamakita)

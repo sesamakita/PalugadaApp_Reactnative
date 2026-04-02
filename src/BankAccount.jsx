@@ -9,7 +9,7 @@ const BankAccount = ({ onBack }) => {
             id: 1,
             bankName: 'Bank BCA',
             accountNumber: '1234567890',
-            accountHolder: 'Budi Santoso',
+            accountHolder: 'Deni Indrayana',
             isPrimary: true,
             logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/200px-Bank_Central_Asia.svg.png'
         },
@@ -17,7 +17,7 @@ const BankAccount = ({ onBack }) => {
             id: 2,
             bankName: 'Bank Mandiri',
             accountNumber: '9876543210',
-            accountHolder: 'Budi Santoso',
+            accountHolder: 'Deni Indrayana',
             isPrimary: false,
             logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png'
         }

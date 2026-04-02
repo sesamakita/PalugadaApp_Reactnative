@@ -11,7 +11,7 @@ const CourierHistory = ({ isSimplified = false }) => {
     const historyData = [
         { id: '#T-988', date: '04 Feb 2026', time: '14:20', income: 'Rp 15.000', status: 'Selesai', shop: 'Toko Batik Jaya', customer: 'Andi Pratama' },
         { id: '#T-985', date: '03 Feb 2026', time: '18:10', income: 'Rp 12.000', status: 'Selesai', shop: 'Warung Bu Siti', customer: 'Maya Sari' },
-        { id: '#T-980', date: '03 Feb 2026', time: '11:45', income: 'Rp 18.000', status: 'Selesai', shop: 'Mart 24/7', customer: 'Budi Santoso' },
+        { id: '#T-980', date: '03 Feb 2026', time: '11:45', income: 'Rp 18.000', status: 'Selesai', shop: 'Mart 24/7', customer: 'Deni Indrayana' },
         { id: '#T-975', date: '02 Feb 2026', time: '20:30', income: 'Rp 10.000', status: 'Selesai', shop: 'Ayam Penyet Mbak Ida', customer: 'Siti Aminah' },
         { id: '#T-970', date: '01 Feb 2026', time: '15:15', income: 'Rp 20.000', status: 'Selesai', shop: 'Toko Elektronik Maju', customer: 'Rudi Hermawan' },
     ];

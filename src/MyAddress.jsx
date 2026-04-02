@@ -9,7 +9,7 @@ const MyAddress = ({ onBack }) => {
         {
             id: 1,
             label: 'Rumah',
-            name: 'Budi Santoso',
+            name: 'Deni Indrayana',
             phone: '+62 812-3456-7890',
             address: 'Jl. Sam Ratulangi No. 123, Kec. Palu Timur',
             city: 'Palu',
@@ -22,7 +22,7 @@ const MyAddress = ({ onBack }) => {
         {
             id: 2,
             label: 'Kantor',
-            name: 'Budi Santoso',
+            name: 'Deni Indrayana',
             phone: '+62 812-3456-7890',
             address: 'Jl. Diponegoro No. 45, Kec. Palu Barat',
             city: 'Palu',

@@ -19,7 +19,7 @@ import './Profile.css';
 
 const Profile = ({ onNavigate, onLogout }) => {
     const user = {
-        name: "Budi Santoso",
+        name: "Deni Indrayana",
         email: "budi.santoso@email.com",
         role: "Member Gold",
         avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150&auto=format&fit=crop"

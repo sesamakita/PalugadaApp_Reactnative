@@ -6,7 +6,7 @@ import AppBar from './components/AppBar';
 const PersonalInfo = ({ onBack }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        name: 'Budi Santoso',
+        name: 'Deni Indrayana',
         email: 'budi.santoso@email.com',
         phone: '+62 812-3456-7890',
         birthDate: '15 Januari 1990',
@@ -43,7 +43,7 @@ const PersonalInfo = ({ onBack }) => {
             <div className="settings-content">
                 <div className="profile-avatar-section">
                     <img
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150&auto=format&fit=crop"
+                        src={`${import.meta.env.BASE_URL}deni_foto.jpeg`}
                         alt="Profile"
                         className="large-avatar"
                     />

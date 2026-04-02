@@ -23,7 +23,7 @@ const CourierRegistration = ({ onBack, onComplete }) => {
     // 🎯 DEMO MODE: Pre-filled data untuk testing visual
     const [formData, setFormData] = useState({
         // Personal Info - PRE-FILLED
-        fullName: 'Budi Santoso',
+        fullName: 'Deni Indrayana',
         phone: '081234567890',
         email: 'budi.santoso@email.com',
         address: 'Jl. Malonda No. 123, Palu Barat, Palu',

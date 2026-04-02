@@ -485,31 +485,39 @@ function App() {
         const data = await response.json()
 
         if (data.address) {
-          // Logika Prioritas baru: Pilih Kabupaten atau Kota
-          const city = data.address.city || data.address.municipality;
+          // Logika Sangat Kuat untuk Indonesia:
+          // Kabupaten/Kota sering ada di 'state_district', 'county', 'city', atau 'municipality'
+          const state = data.address.state;
+          const state_district = data.address.state_district;
           const county = data.address.county;
+          const city = data.address.city || data.address.municipality;
           const town = data.address.town;
-          const province = data.address.state;
+          const city_district = data.address.city_district;
 
           let loc = '';
 
-          if (city) {
-            loc = city;
-          } else if (county) {
-            loc = county;
-          } else if (town) {
-            loc = town;
-          } else if (province) {
-            loc = province;
+          // Prioritas 1: Ambil Kabupaten/Kota (biasanya di county atau state_district)
+          let candidate = county || state_district || city || town;
+
+          // Jika kandidat cuma nama provinsi, cari pilihan lain yang lebih lokal
+          if (candidate && state && candidate.toLowerCase() === state.toLowerCase()) {
+            candidate = city_district || town || null;
+          }
+
+          if (candidate) {
+            loc = candidate;
+          } else if (state) {
+            loc = state;
           } else {
             loc = 'Lokasi Terdeteksi';
           }
 
-          // Pastikan format rapi (Contoh: "Kabupaten Sigi" tetap, atau "Kota Palu")
-          // Jika hanya nama tanpa predikat, biarkan apa adanya dari data Nominatim
+          // Standarisasi Teks: Pastikan kata "Kabupaten" atau "Kota" jelas jika ada
+          // Tapi kita biarkan aslinya dulu karena Nominatim biasanya sudah memberi prefix "Kabupaten "
           
           setUserLocation(loc)
           localStorage.setItem('last_known_location', loc)
+          localStorage.setItem('last_known_type', candidate ? 'local' : 'province')
         }
       } catch (err) {
         console.error('Reverse geocode error:', err);

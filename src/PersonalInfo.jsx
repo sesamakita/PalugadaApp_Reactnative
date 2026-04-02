@@ -43,7 +43,7 @@ const PersonalInfo = ({ onBack }) => {
             <div className="settings-content">
                 <div className="profile-avatar-section">
                     <img
-                        src={`${import.meta.env.BASE_URL}deni_foto.jpeg`}
+                        src={`${import.meta.env.BASE_URL}deni_foto.jpeg?v=1`}
                         alt="Profile"
                         className="large-avatar"
                     />

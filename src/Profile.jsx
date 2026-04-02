@@ -20,9 +20,9 @@ import './Profile.css';
 const Profile = ({ onNavigate, onLogout }) => {
     const user = {
         name: "Deni Indrayana",
-        email: "budi.santoso@email.com",
+        email: "deniindrayana@email.com",
         role: "Member Gold",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150&auto=format&fit=crop"
+        avatar: `${import.meta.env.BASE_URL}deni_foto.jpeg?v=1`
     };
 
     const menuItems = [

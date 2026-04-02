@@ -485,23 +485,28 @@ function App() {
         const data = await response.json()
 
         if (data.address) {
-          // Logika Prioritas untuk Indonesia:
-          // 1. Kota (City) atau Town
-          // 2. Jika tidak ada, ambil Kecamatan (city_district) atau Kelurahan (suburb/village)
-          // 3. Terakhir baru Kabupaten (county) atau Provinsi (state)
-          
-          let loc = data.address.city || 
-                    data.address.town || 
-                    data.address.city_district || 
-                    data.address.suburb || 
-                    data.address.village || 
-                    data.address.municipality ||
-                    data.address.county || 
-                    data.address.state || 
-                    'Lokasi Terdeteksi';
+          // Logika Prioritas baru: Pilih Kabupaten atau Kota
+          const city = data.address.city || data.address.municipality;
+          const county = data.address.county;
+          const town = data.address.town;
+          const province = data.address.state;
 
-          // Bersihkan teks agar rapi (Contoh: "Kabupaten Sigi" -> "Sigi")
-          loc = loc.replace(/Kabupaten /g, '').replace(/City /g, '').replace(/Kota /g, '');
+          let loc = '';
+
+          if (city) {
+            loc = city;
+          } else if (county) {
+            loc = county;
+          } else if (town) {
+            loc = town;
+          } else if (province) {
+            loc = province;
+          } else {
+            loc = 'Lokasi Terdeteksi';
+          }
+
+          // Pastikan format rapi (Contoh: "Kabupaten Sigi" tetap, atau "Kota Palu")
+          // Jika hanya nama tanpa predikat, biarkan apa adanya dari data Nominatim
           
           setUserLocation(loc)
           localStorage.setItem('last_known_location', loc)

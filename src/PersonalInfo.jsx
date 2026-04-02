@@ -7,7 +7,7 @@ const PersonalInfo = ({ onBack }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: 'Deni Indrayana',
-        email: 'budi.santoso@email.com',
+        email: 'deniindrayana@email.com',
         phone: '+62 812-3456-7890',
         birthDate: '15 Januari 1990',
         gender: 'Laki-laki',

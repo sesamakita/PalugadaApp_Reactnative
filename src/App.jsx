@@ -468,56 +468,77 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()
+
+    const reverseGeocode = async (latitude, longitude) => {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
+        signal: controller.signal
+      })
+      clearTimeout(timeoutId)
+
+      const data = await response.json()
+
+      if (data.address) {
+        const loc = data.address.city ||
+          data.address.town ||
+          data.address.city_district ||
+          data.address.county ||
+          data.address.suburb ||
+          data.address.state ||
+          'Lokasi Terdeteksi'
+        setUserLocation(loc)
+        localStorage.setItem('last_known_location', loc)
+      }
+    }
+
     const fetchLocation = async () => {
       try {
         setIsLoadingLocation(true)
 
-        // Check and request permissions first
-        const permStatus = await Geolocation.checkPermissions()
-        if (permStatus.location !== 'granted') {
-          const requestStatus = await Geolocation.requestPermissions()
-          if (requestStatus.location !== 'granted') {
-            setUserLocation('Lokasi Tidak Aktif')
-            setIsLoadingLocation(false)
-            return
+        if (isNative) {
+          // Native Capacitor Geolocation
+          const permStatus = await Geolocation.checkPermissions()
+          if (permStatus.location !== 'granted') {
+            const requestStatus = await Geolocation.requestPermissions()
+            if (requestStatus.location !== 'granted') {
+              setUserLocation('Lokasi Tidak Aktif')
+              setIsLoadingLocation(false)
+              return
+            }
           }
-        }
 
-        // Native Capacitor Geolocation
-        const coordinates = await Geolocation.getCurrentPosition({
-          enableHighAccuracy: false,
-          timeout: 5000, // Reduced timeout to 5s for better UX
-          maximumAge: 3600000
-        })
+          const coordinates = await Geolocation.getCurrentPosition({
+            enableHighAccuracy: false,
+            timeout: 5000,
+            maximumAge: 3600000
+          })
 
-        const { latitude, longitude } = coordinates.coords
-
-        // Fetch address from Nominatim with a shorter timeout if possible
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000)
-
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
-          signal: controller.signal
-        })
-        clearTimeout(timeoutId)
-
-        const data = await response.json()
-
-        if (data.address) {
-          const loc = data.address.city ||
-            data.address.town ||
-            data.address.city_district ||
-            data.address.county ||
-            data.address.suburb ||
-            data.address.state ||
-            'Lokasi Terdeteksi'
-          setUserLocation(loc)
-          localStorage.setItem('last_known_location', loc)
+          await reverseGeocode(coordinates.coords.latitude, coordinates.coords.longitude)
+        } else {
+          // Web browser fallback
+          if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                await reverseGeocode(position.coords.latitude, position.coords.longitude)
+                setIsLoadingLocation(false)
+              },
+              () => {
+                const cached = localStorage.getItem('last_known_location')
+                if (!cached) setUserLocation('Palu')
+                setIsLoadingLocation(false)
+              },
+              { enableHighAccuracy: false, timeout: 5000, maximumAge: 3600000 }
+            )
+            return // early return — callback handles setIsLoadingLocation
+          } else {
+            setUserLocation('Palu')
+          }
         }
       } catch (error) {
         console.error('Error getting geolocation:', error)
-        // If we already have a cached location from localStorage (besides default Palu), 
-        // keep it instead of showing "GPS Mati" to avoid flickering/annoying user
         const cached = localStorage.getItem('last_known_location')
         if (!cached) {
           if (error.message?.includes('Location services') || error.code === 2) {
@@ -531,18 +552,20 @@ function App() {
       }
     }
 
-    // Initial fetch
     fetchLocation()
 
-    // Listen for app resume to re-fetch (e.g. user returns from settings)
-    const resumeListener = CapApp.addListener('appStateChange', ({ isActive }) => {
-      if (isActive) {
-        fetchLocation()
-      }
-    })
+    // Listen for app resume (native only)
+    let resumeListener
+    if (isNative) {
+      resumeListener = CapApp.addListener('appStateChange', ({ isActive }) => {
+        if (isActive) {
+          fetchLocation()
+        }
+      })
+    }
 
     return () => {
-      resumeListener.remove()
+      if (resumeListener) resumeListener.remove()
     }
   }, [])
 

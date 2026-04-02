@@ -36,20 +36,46 @@ const LocationMarker = ({ position, setPosition }) => {
 };
 
 const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
-    const defaultPosition = initialPosition || [-0.8917, 119.8707]; // Palu default
-    const [position, setPosition] = useState(defaultPosition);
+    // Default: Titik tengah Sulawesi Tengah
+    const sultengCenter = [-1.4300, 121.4456];
+    const [position, setPosition] = useState(initialPosition || sultengCenter);
+    const [zoom, setZoom] = useState(initialPosition ? 16 : 7);
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // Auto-detect location on mount
+    useEffect(() => {
+        if (!initialPosition && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const newPos = [pos.coords.latitude, pos.coords.longitude];
+                    setPosition(newPos);
+                    setZoom(16);
+                },
+                (err) => console.log("Auto-detect failed, using default center", err),
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
+        }
+    }, [initialPosition]);
 
     // Reverse geocoding to get address from coordinates
     useEffect(() => {
         if (position) {
             setLoading(true);
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position[0]}&lon=${position[1]}`)
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position[0]}&lon=${position[1]}&addressdetails=1`)
                 .then(res => res.json())
                 .then(data => {
-                    if (data.display_name) {
-                        setAddress(data.display_name);
+                    if (data.address) {
+                        // Prioritas: Kabupaten (County), Kota (City/State District), atau Town
+                        const regency = data.address.county || 
+                                        data.address.state_district || 
+                                        data.address.city || 
+                                        data.address.municipality || 
+                                        data.address.town;
+                        
+                        // Tampilkan alamat lengkap tapi simpan referensi regency
+                        const fullAddr = data.display_name;
+                        setAddress(fullAddr);
                     }
                     setLoading(false);
                 })
@@ -61,14 +87,19 @@ const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
 
     const handleUseCurrentLocation = () => {
         if (navigator.geolocation) {
+            setLoading(true);
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
                     setPosition([pos.coords.latitude, pos.coords.longitude]);
+                    setZoom(16);
+                    setLoading(false);
                 },
                 (error) => {
+                    setLoading(false);
                     console.error('Error getting location:', error);
                     alert('Tidak dapat mengakses lokasi Anda. Pastikan izin lokasi diaktifkan.');
-                }
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
             );
         } else {
             alert('Geolocation tidak didukung oleh browser Anda.');
@@ -96,8 +127,9 @@ const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
                 <div className="map-container">
                     <MapContainer
                         center={position}
-                        zoom={15}
+                        zoom={zoom}
                         style={{ height: '100%', width: '100%' }}
+                        key={`${position[0]}-${position[1]}`} // Force re-render on pos change
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -116,14 +148,14 @@ const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
                     <div className="selected-address">
                         <p className="address-label">Alamat Terpilih:</p>
                         <p className="address-text">
-                            {loading ? 'Memuat alamat...' : address || 'Klik pada peta untuk memilih lokasi'}
+                            {loading ? 'Memuat lokasi...' : address || 'Klik pada peta untuk memilih lokasi'}
                         </p>
                     </div>
                     <div className="map-modal-actions">
                         <button className="cancel-btn" onClick={onClose}>
                             Batal
                         </button>
-                        <button className="save-btn" onClick={handleConfirm}>
+                        <button className="save-btn" onClick={handleConfirm} disabled={loading}>
                             Konfirmasi Lokasi
                         </button>
                     </div>

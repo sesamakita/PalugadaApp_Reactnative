@@ -476,23 +476,38 @@ function App() {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 5000)
 
-      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
-        signal: controller.signal
-      })
-      clearTimeout(timeoutId)
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
 
-      const data = await response.json()
+        const data = await response.json()
 
-      if (data.address) {
-        const loc = data.address.city ||
-          data.address.town ||
-          data.address.city_district ||
-          data.address.county ||
-          data.address.suburb ||
-          data.address.state ||
-          'Lokasi Terdeteksi'
-        setUserLocation(loc)
-        localStorage.setItem('last_known_location', loc)
+        if (data.address) {
+          // Logika Prioritas untuk Indonesia:
+          // 1. Kota (City) atau Town
+          // 2. Jika tidak ada, ambil Kecamatan (city_district) atau Kelurahan (suburb/village)
+          // 3. Terakhir baru Kabupaten (county) atau Provinsi (state)
+          
+          let loc = data.address.city || 
+                    data.address.town || 
+                    data.address.city_district || 
+                    data.address.suburb || 
+                    data.address.village || 
+                    data.address.municipality ||
+                    data.address.county || 
+                    data.address.state || 
+                    'Lokasi Terdeteksi';
+
+          // Bersihkan teks agar rapi (Contoh: "Kabupaten Sigi" -> "Sigi")
+          loc = loc.replace(/Kabupaten /g, '').replace(/City /g, '').replace(/Kota /g, '');
+          
+          setUserLocation(loc)
+          localStorage.setItem('last_known_location', loc)
+        }
+      } catch (err) {
+        console.error('Reverse geocode error:', err);
       }
     }
 
@@ -513,8 +528,8 @@ function App() {
           }
 
           const coordinates = await Geolocation.getCurrentPosition({
-            enableHighAccuracy: false,
-            timeout: 5000,
+            enableHighAccuracy: true, // Diaktifkan agar lebih presisi
+            timeout: 10000,
             maximumAge: 3600000
           })
 
@@ -532,9 +547,9 @@ function App() {
                 if (!cached) setUserLocation('Palu')
                 setIsLoadingLocation(false)
               },
-              { enableHighAccuracy: false, timeout: 5000, maximumAge: 3600000 }
+              { enableHighAccuracy: true, timeout: 10000, maximumAge: 3600000 }
             )
-            return // early return — callback handles setIsLoadingLocation
+            return
           } else {
             setUserLocation('Palu')
           }
@@ -543,11 +558,7 @@ function App() {
         console.error('Error getting geolocation:', error)
         const cached = localStorage.getItem('last_known_location')
         if (!cached) {
-          if (error.message?.includes('Location services') || error.code === 2) {
-            setUserLocation('GPS Mati')
-          } else {
-            setUserLocation('Palu')
-          }
+          setUserLocation('Palu')
         }
       } finally {
         setIsLoadingLocation(false)

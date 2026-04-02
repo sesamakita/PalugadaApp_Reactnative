@@ -3,6 +3,7 @@ import { Search, Filter, Utensils, Shirt, Gem, Briefcase, Zap, Store, Star, MapP
 import './Explore.css';
 
 const Explore = ({ onProductClick }) => {
+    const base = import.meta.env.BASE_URL
     const categoryGrid = [
         { name: 'Kuliner', icon: <Utensils size={24} />, color: '#ff6b6b' },
         { name: 'Fashion', icon: <Shirt size={24} />, color: '#4dadf7' },
@@ -11,14 +12,14 @@ const Explore = ({ onProductClick }) => {
     ];
 
     const featuredStores = [
-        { id: 101, name: "Galeri Tenun Bomba", rating: 4.9, image: "/tenun_bomba.png", tags: ["Premium", "Palu"] },
-        { id: 102, name: "Hj. Mbok Sri Palu", rating: 4.8, image: "/bawang_goreng_palu.png", tags: ["Bestseller", "Bawang Goreng"] },
+        { id: 101, name: "Galeri Tenun Bomba", rating: 4.9, image: `${base}tenun_bomba.png`, tags: ["Premium", "Palu"] },
+        { id: 102, name: "Hj. Mbok Sri Palu", rating: 4.8, image: `${base}bawang_goreng_palu.png`, tags: ["Bestseller", "Bawang Goreng"] },
     ];
 
     const trendingProducts = [
-        { id: 10, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', rating: 5.0, image: '/kopi_donggala.png' },
-        { id: 11, name: 'Tas Anyaman Poso', price: 'Rp 195.000', rating: 4.9, image: '/tas_poso.png' },
-        { id: 12, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', rating: 4.7, image: '/sagu_rendang.png' },
+        { id: 10, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', rating: 5.0, image: `${base}kopi_donggala.png` },
+        { id: 11, name: 'Tas Anyaman Poso', price: 'Rp 195.000', rating: 4.9, image: `${base}tas_poso.png` },
+        { id: 12, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', rating: 4.7, image: `${base}sagu_rendang.png` },
     ];
 
     return (

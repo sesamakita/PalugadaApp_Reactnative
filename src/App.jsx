@@ -82,14 +82,16 @@ function App() {
 
   const categories = ['Semua', 'Kuliner', 'Fashion', 'Crafts', 'Layanan']
 
+  const base = import.meta.env.BASE_URL
+
   const products = [
     // Makanan (Food)
-    { id: 1, name: 'Bawang Goreng Palu Super', price: 'Rp 65.000', category: 'Makanan', location: 'Palu', rating: 4.9, image: '/bawang_goreng_palu.png', store: 'Hj. Mbok Sri Palu', stock: 50 },
-    { id: 2, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', category: 'Makanan', location: 'Parigi Moutong', rating: 4.7, image: '/sagu_rendang.png', store: 'Oleh-oleh Parigi', stock: 120 },
-    { id: 3, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', category: 'Makanan', location: 'Donggala', rating: 5.0, image: '/kopi_donggala.png', store: 'Donggala Coffee House', stock: 40 },
-    { id: 4, name: 'Sambal Roa Khas Palu', price: 'Rp 45.000', category: 'Makanan', location: 'Palu', rating: 4.8, image: '/sambal_roa.png', store: 'Dapur Roa Palu', stock: 85 },
-    { id: 5, name: 'Saraba Instan Poso', price: 'Rp 35.000', category: 'Makanan', location: 'Poso', rating: 4.6, image: '/saraba_poso.png', store: 'Minuman Herbal Poso', stock: 70 },
-    { id: 6, name: 'Madu Hutan Lore Lindu', price: 'Rp 185.000', category: 'Makanan', location: 'Lindu', rating: 4.9, image: '/madu_lindu.png', store: 'Madu Lindu Asli', stock: 25 },
+    { id: 1, name: 'Bawang Goreng Palu Super', price: 'Rp 65.000', category: 'Makanan', location: 'Palu', rating: 4.9, image: `${base}bawang_goreng_palu.png`, store: 'Hj. Mbok Sri Palu', stock: 50 },
+    { id: 2, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', category: 'Makanan', location: 'Parigi Moutong', rating: 4.7, image: `${base}sagu_rendang.png`, store: 'Oleh-oleh Parigi', stock: 120 },
+    { id: 3, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', category: 'Makanan', location: 'Donggala', rating: 5.0, image: `${base}kopi_donggala.png`, store: 'Donggala Coffee House', stock: 40 },
+    { id: 4, name: 'Sambal Roa Khas Palu', price: 'Rp 45.000', category: 'Makanan', location: 'Palu', rating: 4.8, image: `${base}sambal_roa.png`, store: 'Dapur Roa Palu', stock: 85 },
+    { id: 5, name: 'Saraba Instan Poso', price: 'Rp 35.000', category: 'Makanan', location: 'Poso', rating: 4.6, image: `${base}saraba_poso.png`, store: 'Minuman Herbal Poso', stock: 70 },
+    { id: 6, name: 'Madu Hutan Lore Lindu', price: 'Rp 185.000', category: 'Makanan', location: 'Lindu', rating: 4.9, image: `${base}madu_lindu.png`, store: 'Madu Lindu Asli', stock: 25 },
 
     // Elektronik (Electronics)
     { id: 7, name: 'Powerbank 20000mAh', price: 'Rp 185.000', category: 'Elektronik', location: 'Palu', rating: 4.7, image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=300&auto=format&fit=crop', store: 'Palu Gadget Store', stock: 45 },
@@ -100,7 +102,7 @@ function App() {
     { id: 12, name: 'Kabel Data Type-C', price: 'Rp 45.000', category: 'Elektronik', location: 'Morowali', rating: 4.4, image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=300&auto=format&fit=crop', store: 'Morowali Tech', stock: 200 },
 
     // Pakaian (Clothing)
-    { id: 13, name: 'Tenun Bomba Palu Premium', price: 'Rp 750.000', category: 'Pakaian', location: 'Palu', rating: 4.9, image: '/tenun_bomba.png', store: 'Galeri Tenun Bomba', stock: 10 },
+    { id: 13, name: 'Tenun Bomba Palu Premium', price: 'Rp 750.000', category: 'Pakaian', location: 'Palu', rating: 4.9, image: `${base}tenun_bomba.png`, store: 'Galeri Tenun Bomba', stock: 10 },
     { id: 14, name: 'Kaos Palu Ngataku', price: 'Rp 125.000', category: 'Pakaian', location: 'Palu', rating: 4.8, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=300&auto=format&fit=crop', store: 'Kaos Khas Palu', stock: 60 },
     { id: 15, name: 'Baju Adat Kaili (Siga)', price: 'Rp 350.000', category: 'Pakaian', location: 'Donggala', rating: 4.9, image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=300&auto=format&fit=crop', store: 'Adat Kaili Shop', stock: 15 },
     { id: 16, name: 'Kaos Polos Premium', price: 'Rp 75.000', category: 'Pakaian', location: 'Luwuk', rating: 4.5, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=300&auto=format&fit=crop', store: 'Luwuk Fashion', stock: 120 },
@@ -113,7 +115,7 @@ function App() {
     { id: 21, name: 'Topi Baseball Keren', price: 'Rp 65.000', category: 'Aksesoris', location: 'Parigi', rating: 4.5, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=300&auto=format&fit=crop', store: 'Parigi Hat Store', stock: 85 },
     { id: 22, name: 'Dompet Kulit Asli', price: 'Rp 145.000', category: 'Aksesoris', location: 'Palu', rating: 4.6, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop', store: 'Leather Craft Palu', stock: 45 },
     { id: 23, name: 'Kacamata Hitam UV', price: 'Rp 125.000', category: 'Aksesoris', location: 'Togean', rating: 4.7, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=300&auto=format&fit=crop', store: 'Togean Eyewear', stock: 50 },
-    { id: 24, name: 'Tas Anyaman Khas Poso', price: 'Rp 195.000', category: 'Aksesoris', location: 'Poso', rating: 4.9, image: '/tas_poso.png', store: 'Kerajinan Poso', stock: 22 },
+    { id: 24, name: 'Tas Anyaman Khas Poso', price: 'Rp 195.000', category: 'Aksesoris', location: 'Poso', rating: 4.9, image: `${base}tas_poso.png`, store: 'Kerajinan Poso', stock: 22 },
   ]
 
   const handleProductClick = (product) => {

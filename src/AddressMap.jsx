@@ -36,7 +36,7 @@ const LocationMarker = ({ position, setPosition }) => {
 };
 
 const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
-    const defaultPosition = initialPosition || [-7.2575, 112.7521]; // Surabaya default
+    const defaultPosition = initialPosition || [-0.8917, 119.8707]; // Palu default
     const [position, setPosition] = useState(defaultPosition);
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState(false);

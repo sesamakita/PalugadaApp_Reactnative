@@ -52,7 +52,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedStore, setSelectedStore] = useState(null)
   const [cartItems, setCartItems] = useState([])
-  const [userLocation, setUserLocation] = useState('Surabaya')
+  const [userLocation, setUserLocation] = useState('Palu')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
   const [walletRole, setWalletRole] = useState('buyer') // 'buyer', 'seller', 'courier'
   const [walletBackView, setWalletBackView] = useState('profile') // view to go back to
@@ -84,36 +84,36 @@ function App() {
 
   const products = [
     // Makanan (Food)
-    { id: 1, name: 'Rendang Daging Sapi Premium', price: 'Rp 85.000', category: 'Makanan', location: 'Padang', rating: 4.9, image: 'https://images.unsplash.com/photo-1625398407796-82650a8c135f?q=80&w=300&auto=format&fit=crop', store: 'Rumah Makan Sederhana', stock: 25 },
-    { id: 2, name: 'Keripik Singkong Balado', price: 'Rp 18.000', category: 'Makanan', location: 'Malang', rating: 4.7, image: 'https://images.unsplash.com/photo-1600271772470-bd21a4c88f1c?q=80&w=300&auto=format&fit=crop', store: 'Snack Nusantara', stock: 150 },
-    { id: 3, name: 'Kopi Arabika Gayo Premium 250gr', price: 'Rp 125.000', category: 'Makanan', location: 'Aceh', rating: 5.0, image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=300&auto=format&fit=crop', store: 'Kopi Nusantara', stock: 40 },
-    { id: 4, name: 'Sambal Ijo Bu Rudi', price: 'Rp 32.000', category: 'Makanan', location: 'Surabaya', rating: 4.8, image: 'https://images.unsplash.com/photo-1599307730815-46fd2535043d?q=80&w=300&auto=format&fit=crop', store: 'Sambal Bu Rudi', stock: 80 },
-    { id: 5, name: 'Dodol Garut Premium 500gr', price: 'Rp 45.000', category: 'Makanan', location: 'Garut', rating: 4.6, image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=300&auto=format&fit=crop', store: 'Toko Oleh-oleh Garut', stock: 60 },
-    { id: 6, name: 'Madu Hutan Murni 500ml', price: 'Rp 175.000', category: 'Makanan', location: 'Kalimantan', rating: 4.9, image: 'https://images.unsplash.com/photo-1587381420270-3e1a5b9e6904?q=80&w=300&auto=format&fit=crop', store: 'Madu Asli Indonesia', stock: 30 },
+    { id: 1, name: 'Bawang Goreng Palu Super', price: 'Rp 65.000', category: 'Makanan', location: 'Palu', rating: 4.9, image: '/bawang_goreng_palu.png', store: 'Hj. Mbok Sri Palu', stock: 50 },
+    { id: 2, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', category: 'Makanan', location: 'Parigi Moutong', rating: 4.7, image: '/sagu_rendang.png', store: 'Oleh-oleh Parigi', stock: 120 },
+    { id: 3, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', category: 'Makanan', location: 'Donggala', rating: 5.0, image: '/kopi_donggala.png', store: 'Donggala Coffee House', stock: 40 },
+    { id: 4, name: 'Sambal Roa Khas Palu', price: 'Rp 45.000', category: 'Makanan', location: 'Palu', rating: 4.8, image: '/sambal_roa.png', store: 'Dapur Roa Palu', stock: 85 },
+    { id: 5, name: 'Saraba Instan Poso', price: 'Rp 35.000', category: 'Makanan', location: 'Poso', rating: 4.6, image: '/saraba_poso.png', store: 'Minuman Herbal Poso', stock: 70 },
+    { id: 6, name: 'Madu Hutan Lore Lindu', price: 'Rp 185.000', category: 'Makanan', location: 'Lindu', rating: 4.9, image: '/madu_lindu.png', store: 'Madu Lindu Asli', stock: 25 },
 
     // Elektronik (Electronics)
-    { id: 7, name: 'Powerbank 20000mAh Fast Charging', price: 'Rp 185.000', category: 'Elektronik', location: 'Jakarta', rating: 4.7, image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=300&auto=format&fit=crop', store: 'Gadget Store JKT', stock: 45 },
-    { id: 8, name: 'TWS Earbuds Bluetooth 5.0', price: 'Rp 145.000', category: 'Elektronik', location: 'Bandung', rating: 4.5, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=300&auto=format&fit=crop', store: 'Audio Tech', stock: 70 },
-    { id: 9, name: 'Smartwatch Sport Edition', price: 'Rp 350.000', category: 'Elektronik', location: 'Surabaya', rating: 4.8, image: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=300&auto=format&fit=crop', store: 'Smart Gadget Hub', stock: 25 },
-    { id: 10, name: 'Charger 3 Port USB Fast Charge', price: 'Rp 95.000', category: 'Elektronik', location: 'Jakarta', rating: 4.6, image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?q=80&w=300&auto=format&fit=crop', store: 'Aksesori HP Murah', stock: 100 },
-    { id: 11, name: 'Ring Light LED 10 inch', price: 'Rp 165.000', category: 'Elektronik', location: 'Yogyakarta', rating: 4.7, image: 'https://images.unsplash.com/photo-1611532736579-6b16e2b50449?q=80&w=300&auto=format&fit=crop', store: 'Studio Gear', stock: 35 },
-    { id: 12, name: 'Kabel Data Type-C Premium 2m', price: 'Rp 45.000', category: 'Elektronik', location: 'Bandung', rating: 4.4, image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=300&auto=format&fit=crop', store: 'Cable & More', stock: 200 },
+    { id: 7, name: 'Powerbank 20000mAh', price: 'Rp 185.000', category: 'Elektronik', location: 'Palu', rating: 4.7, image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=300&auto=format&fit=crop', store: 'Palu Gadget Store', stock: 45 },
+    { id: 8, name: 'TWS Earbuds Bluetooth', price: 'Rp 145.000', category: 'Elektronik', location: 'Luwuk', rating: 4.5, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=300&auto=format&fit=crop', store: 'Audio Luwuk Central', stock: 70 },
+    { id: 9, name: 'Smartwatch Sport Palu', price: 'Rp 350.000', category: 'Elektronik', location: 'Palu', rating: 4.8, image: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=300&auto=format&fit=crop', store: 'Smart Hub Palu', stock: 25 },
+    { id: 10, name: 'Charger Fast Quick', price: 'Rp 95.000', category: 'Elektronik', location: 'Tolitoli', rating: 4.6, image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?q=80&w=300&auto=format&fit=crop', store: 'Tolitoli Aksesori', stock: 100 },
+    { id: 11, name: 'Ring Light LED 10"', price: 'Rp 165.000', category: 'Elektronik', location: 'Palu', rating: 4.7, image: 'https://images.unsplash.com/photo-1611532736579-6b16e2b50449?q=80&w=300&auto=format&fit=crop', store: 'Studio Gadget Palu', stock: 35 },
+    { id: 12, name: 'Kabel Data Type-C', price: 'Rp 45.000', category: 'Elektronik', location: 'Morowali', rating: 4.4, image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=300&auto=format&fit=crop', store: 'Morowali Tech', stock: 200 },
 
     // Pakaian (Clothing)
-    { id: 13, name: 'Batik Tulis Madura Premium', price: 'Rp 450.000', category: 'Pakaian', location: 'Madura', rating: 4.9, image: 'https://images.unsplash.com/photo-1584905066893-7d5c142ba4e1?q=80&w=300&auto=format&fit=crop', store: 'Batik Asli Madura', stock: 15 },
-    { id: 14, name: 'Kemeja Flanel Pria', price: 'Rp 125.000', category: 'Pakaian', location: 'Bandung', rating: 4.6, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=300&auto=format&fit=crop', store: 'Fashion Pria Modern', stock: 50 },
-    { id: 15, name: 'Dress Tenun Ikat NTT', price: 'Rp 285.000', category: 'Pakaian', location: 'NTT', rating: 4.8, image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=300&auto=format&fit=crop', store: 'Tenun Nusantara', stock: 20 },
-    { id: 16, name: 'Kaos Polos Premium Cotton', price: 'Rp 75.000', category: 'Pakaian', location: 'Jakarta', rating: 4.5, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=300&auto=format&fit=crop', store: 'Kaos Store', stock: 120 },
-    { id: 17, name: 'Celana Jeans Slim Fit', price: 'Rp 195.000', category: 'Pakaian', location: 'Surabaya', rating: 4.7, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=300&auto=format&fit=crop', store: 'Denim House', stock: 60 },
-    { id: 18, name: 'Jaket Hoodie Fleece', price: 'Rp 165.000', category: 'Pakaian', location: 'Bandung', rating: 4.6, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=300&auto=format&fit=crop', store: 'Jacket Zone', stock: 40 },
+    { id: 13, name: 'Tenun Bomba Palu Premium', price: 'Rp 750.000', category: 'Pakaian', location: 'Palu', rating: 4.9, image: '/tenun_bomba.png', store: 'Galeri Tenun Bomba', stock: 10 },
+    { id: 14, name: 'Kaos Palu Ngataku', price: 'Rp 125.000', category: 'Pakaian', location: 'Palu', rating: 4.8, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=300&auto=format&fit=crop', store: 'Kaos Khas Palu', stock: 60 },
+    { id: 15, name: 'Baju Adat Kaili (Siga)', price: 'Rp 350.000', category: 'Pakaian', location: 'Donggala', rating: 4.9, image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=300&auto=format&fit=crop', store: 'Adat Kaili Shop', stock: 15 },
+    { id: 16, name: 'Kaos Polos Premium', price: 'Rp 75.000', category: 'Pakaian', location: 'Luwuk', rating: 4.5, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=300&auto=format&fit=crop', store: 'Luwuk Fashion', stock: 120 },
+    { id: 17, name: 'Celana Jeans Slim', price: 'Rp 195.000', category: 'Pakaian', location: 'Palu', rating: 4.7, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=300&auto=format&fit=crop', store: 'Denim Palu Store', stock: 60 },
+    { id: 18, name: 'Jaket Hoodie Fleece', price: 'Rp 165.000', category: 'Pakaian', location: 'Poso', rating: 4.6, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=300&auto=format&fit=crop', store: 'Poso Apparel', stock: 40 },
 
     // Aksesoris (Accessories)
-    { id: 19, name: 'Tas Ransel Kanvas Premium', price: 'Rp 185.000', category: 'Aksesoris', location: 'Bandung', rating: 4.7, image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=300&auto=format&fit=crop', store: 'Bag Collection', stock: 35 },
-    { id: 20, name: 'Jam Tangan Pria Analog', price: 'Rp 235.000', category: 'Aksesoris', location: 'Jakarta', rating: 4.8, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=300&auto=format&fit=crop', store: 'Watch Gallery', stock: 28 },
-    { id: 21, name: 'Topi Baseball Premium', price: 'Rp 65.000', category: 'Aksesoris', location: 'Yogyakarta', rating: 4.5, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=300&auto=format&fit=crop', store: 'Hat Store', stock: 85 },
-    { id: 22, name: 'Dompet Kulit Asli Pria', price: 'Rp 145.000', category: 'Aksesoris', location: 'Solo', rating: 4.6, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop', store: 'Leather Craft', stock: 45 },
-    { id: 23, name: 'Kacamata Hitam UV Protection', price: 'Rp 125.000', category: 'Aksesoris', location: 'Bali', rating: 4.7, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=300&auto=format&fit=crop', store: 'Eyewear Plus', stock: 50 },
-    { id: 24, name: 'Tas Anyaman Rotan Bali', price: 'Rp 195.000', category: 'Aksesoris', location: 'Bali', rating: 4.9, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=300&auto=format&fit=crop', store: 'Bali Craft', stock: 22 },
+    { id: 19, name: 'Tas Ransel Kanvas', price: 'Rp 185.000', category: 'Aksesoris', location: 'Palu', rating: 4.7, image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=300&auto=format&fit=crop', store: 'Palu Bag Collection', stock: 35 },
+    { id: 20, name: 'Jam Tangan Analog', price: 'Rp 235.000', category: 'Aksesoris', location: 'Palu', rating: 4.8, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=300&auto=format&fit=crop', store: 'Watch Palu Gallery', stock: 28 },
+    { id: 21, name: 'Topi Baseball Keren', price: 'Rp 65.000', category: 'Aksesoris', location: 'Parigi', rating: 4.5, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=300&auto=format&fit=crop', store: 'Parigi Hat Store', stock: 85 },
+    { id: 22, name: 'Dompet Kulit Asli', price: 'Rp 145.000', category: 'Aksesoris', location: 'Palu', rating: 4.6, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop', store: 'Leather Craft Palu', stock: 45 },
+    { id: 23, name: 'Kacamata Hitam UV', price: 'Rp 125.000', category: 'Aksesoris', location: 'Togean', rating: 4.7, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=300&auto=format&fit=crop', store: 'Togean Eyewear', stock: 50 },
+    { id: 24, name: 'Tas Anyaman Khas Poso', price: 'Rp 195.000', category: 'Aksesoris', location: 'Poso', rating: 4.9, image: '/tas_poso.png', store: 'Kerajinan Poso', stock: 22 },
   ]
 
   const handleProductClick = (product) => {
@@ -516,14 +516,14 @@ function App() {
         }
       } catch (error) {
         console.error('Error getting geolocation:', error)
-        // If we already have a cached location from localStorage (besides default Surabaya), 
+        // If we already have a cached location from localStorage (besides default Palu), 
         // keep it instead of showing "GPS Mati" to avoid flickering/annoying user
         const cached = localStorage.getItem('last_known_location')
         if (!cached) {
           if (error.message?.includes('Location services') || error.code === 2) {
             setUserLocation('GPS Mati')
           } else {
-            setUserLocation('Surabaya')
+            setUserLocation('Palu')
           }
         }
       } finally {

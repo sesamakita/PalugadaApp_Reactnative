@@ -11,12 +11,12 @@ const MyAddress = ({ onBack }) => {
             label: 'Rumah',
             name: 'Budi Santoso',
             phone: '+62 812-3456-7890',
-            address: 'Jl. Raya Darmo No. 123, Kec. Wonokromo',
-            city: 'Surabaya',
-            province: 'Jawa Timur',
-            postalCode: '60241',
-            lat: -7.2575,
-            lng: 112.7521,
+            address: 'Jl. Sam Ratulangi No. 123, Kec. Palu Timur',
+            city: 'Palu',
+            province: 'Sulawesi Tengah',
+            postalCode: '94111',
+            lat: -0.8917,
+            lng: 119.8707,
             isPrimary: true
         },
         {
@@ -24,12 +24,12 @@ const MyAddress = ({ onBack }) => {
             label: 'Kantor',
             name: 'Budi Santoso',
             phone: '+62 812-3456-7890',
-            address: 'Jl. HR Muhammad No. 456, Kec. Gubeng',
-            city: 'Surabaya',
-            province: 'Jawa Timur',
-            postalCode: '60281',
-            lat: -7.2650,
-            lng: 112.7520,
+            address: 'Jl. Diponegoro No. 45, Kec. Palu Barat',
+            city: 'Palu',
+            province: 'Sulawesi Tengah',
+            postalCode: '94221',
+            lat: -0.8930,
+            lng: 119.8520,
             isPrimary: false
         }
     ]);

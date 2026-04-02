@@ -22,9 +22,9 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
     const [productCategory, setProductCategory] = useState('Kuliner');
     const [showMapModal, setShowMapModal] = useState(false);
     const [storeLocation, setStoreLocation] = useState({
-        lat: -7.0455,
-        lng: 112.9037,
-        address: 'Bangkalan, Madura, Jawa Timur'
+        lat: -0.8917,
+        lng: 119.8707,
+        address: 'Jl. Sam Ratulangi, Palu City, Sulawesi Tengah'
     });
 
     // Helper: parse "Rp 450.000" → 450000
@@ -44,8 +44,8 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
     ];
 
     const recentOrders = [
-        { id: '#12345', buyer: 'Budi Santoso', product: 'Batik Tulis Madura', status: 'Siap Dikirim', price: 'Rp 450.000', date: '01 Feb 2026', address: 'Jl. Melati No. 5, Surabaya' },
-        { id: '#12344', buyer: 'Siti Aminah', product: 'Sambal Bu Rudy', status: 'Selesai', price: 'Rp 28.000', date: '31 Jan 2026', address: 'Gresik' },
+        { id: '#12345', buyer: 'Asep Saepul', product: 'Tenun Bomba Palu', status: 'Siap Dikirim', price: 'Rp 750.000', date: '27 Feb 2026', address: 'Jl. Basuki Rahmat, Palu' },
+        { id: '#12344', buyer: 'Linda Sari', product: 'Bawang Goreng Palu', status: 'Selesai', price: 'Rp 65.000', date: '26 Feb 2026', address: 'Donggala' },
     ];
 
     const handleOrderClick = (order) => {
@@ -196,7 +196,7 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
                         </div>
                         <div className="form-group">
                             <label>Cakupan Layanan</label>
-                            <input type="text" placeholder="Contoh: Seluruh Surabaya" />
+                            <input type="text" placeholder="Contoh: Seluruh Palu" />
                         </div>
                     </div>
                 )}

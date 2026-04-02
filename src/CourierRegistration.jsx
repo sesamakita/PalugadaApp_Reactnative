@@ -26,11 +26,11 @@ const CourierRegistration = ({ onBack, onComplete }) => {
         fullName: 'Budi Santoso',
         phone: '081234567890',
         email: 'budi.santoso@email.com',
-        address: 'Jl. Raya Gubeng No. 123, Gubeng, Surabaya',
+        address: 'Jl. Malonda No. 123, Palu Barat, Palu',
 
         // Vehicle Info - PRE-FILLED
         vehicleType: 'motorcycle', // motorcycle, car, bicycle
-        plateNumber: 'L 1234 AB',
+        plateNumber: 'DN 1234 AB',
         vehicleBrand: 'Honda Vario 150',
         vehicleColor: 'Hitam',
 
@@ -42,18 +42,18 @@ const CourierRegistration = ({ onBack, onComplete }) => {
         vehiclePhoto: { name: 'vehicle-demo.jpg' },
 
         // Zone Selection - PRE-FILLED
-        city: 'Surabaya',
-        preferredZones: ['SBY-ZONE-001', 'SBY-ZONE-002'],
+        city: 'Palu',
+        preferredZones: ['PALU-ZONE-001', 'PALU-ZONE-002'],
 
         // Availability - PRE-FILLED
         availability: 'fulltime' // fulltime, parttime, weekend
     });
 
     const zones = [
-        { id: 'SBY-ZONE-001', name: 'Gubeng - Airlangga', districts: ['Gubeng', 'Airlangga', 'Pucang Sewu'] },
-        { id: 'SBY-ZONE-002', name: 'Tegalsari - Genteng', districts: ['Tegalsari', 'Genteng', 'Embong Kaliasin'] },
-        { id: 'SBY-ZONE-003', name: 'Wonokromo - Darmo', districts: ['Wonokromo', 'Darmo', 'Sawahan'] },
-        { id: 'SBY-ZONE-004', name: 'Sukolilo - Keputih', districts: ['Sukolilo', 'Keputih', 'Semolowaru'] }
+        { id: 'PALU-ZONE-001', name: 'Palu Timur - Mantikulore', districts: ['Besusu', 'Lolu', 'Tanamodindi'] },
+        { id: 'PALU-ZONE-002', name: 'Palu Barat - Ulujadi', districts: ['Kabonena', 'Silae', 'Tipulu'] },
+        { id: 'PALU-ZONE-003', name: 'Palu Selatan - Tatanga', districts: ['Birobuli', 'Tatura', 'Palupi'] },
+        { id: 'PALU-ZONE-004', name: 'Palu Utara - Tawaeli', districts: ['Mamboro', 'Panau', 'Lambara'] }
     ];
 
     const handleInputChange = (field, value) => {

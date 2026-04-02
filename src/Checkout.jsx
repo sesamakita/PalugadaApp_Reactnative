@@ -33,7 +33,7 @@ const Checkout = ({ cartItems, onBack, onConfirm }) => {
                     </h3>
                     <div className="address-box">
                         <strong>Deni Apps</strong>
-                        <p>Jl. Raya Utama No. 123, Sukolilo, Surabaya, Jawa Timur 60111</p>
+                        <p>Jl. Sam Ratulangi No. 123, Palu Timur, Palu, Sulawesi Tengah 94111</p>
                         <button className="btn-text">Ubah Alamat</button>
                     </div>
                 </div>

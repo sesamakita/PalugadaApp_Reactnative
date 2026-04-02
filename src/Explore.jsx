@@ -11,14 +11,14 @@ const Explore = ({ onProductClick }) => {
     ];
 
     const featuredStores = [
-        { id: 101, name: "Batik Solo Abadi", rating: 4.9, image: "https://images.unsplash.com/photo-1590736962237-fa169cb85042?q=80&w=150&auto=format&fit=crop", tags: ["Premium", "Kultural"] },
-        { id: 102, name: "Sambal Nusantara", rating: 4.8, image: "https://images.unsplash.com/photo-1599307730815-46fd2535043d?q=80&w=150&auto=format&fit=crop", tags: ["Bestseller", "Kuliner"] },
+        { id: 101, name: "Galeri Tenun Bomba", rating: 4.9, image: "/tenun_bomba.png", tags: ["Premium", "Palu"] },
+        { id: 102, name: "Hj. Mbok Sri Palu", rating: 4.8, image: "/bawang_goreng_palu.png", tags: ["Bestseller", "Bawang Goreng"] },
     ];
 
     const trendingProducts = [
-        { id: 10, name: 'Kopi Gayo Premium', price: 'Rp 85.000', rating: 5.0, image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=200&auto=format&fit=crop' },
-        { id: 11, name: 'Tas Rotan Bali', price: 'Rp 150.000', rating: 4.9, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=200&auto=format&fit=crop' },
-        { id: 12, name: 'Keripik Tempe Malang', price: 'Rp 12.000', rating: 4.7, image: 'https://images.unsplash.com/photo-1600271772470-bd21a4c88f1c?q=80&w=200&auto=format&fit=crop' },
+        { id: 10, name: 'Kopi Donggala Arabika', price: 'Rp 95.000', rating: 5.0, image: '/kopi_donggala.png' },
+        { id: 11, name: 'Tas Anyaman Poso', price: 'Rp 195.000', rating: 4.9, image: '/tas_poso.png' },
+        { id: 12, name: 'Sagu Rendang Parigi', price: 'Rp 25.000', rating: 4.7, image: '/sagu_rendang.png' },
     ];
 
     return (

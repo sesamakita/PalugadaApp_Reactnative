@@ -11,7 +11,7 @@ const PersonalInfo = ({ onBack }) => {
         phone: '+62 812-3456-7890',
         birthDate: '15 Januari 1990',
         gender: 'Laki-laki',
-        city: 'Surabaya'
+        city: 'Palu'
     });
 
     const handleChange = (field, value) => {

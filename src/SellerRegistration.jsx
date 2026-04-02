@@ -34,13 +34,13 @@ const SellerRegistration = ({ onBack, onComplete }) => {
         nik: '3578012345678901',
         phone: '081234567890',
         email: 'deni.apps@email.com',
-        address: 'Jl. Raya Utama No. 123, Sukolilo, Surabaya',
+        address: 'Jl. Sam Ratulangi No. 123, Palu Timur, Palu',
 
         // Step 2: Store Info
-        storeName: 'Palugada Mart Surabaya',
+        storeName: 'Palugada Mart Palu',
         storeCategory: 'Barang', // Kuliner, Barang, Jasa
         storeDescription: 'Menyediakan segala kebutuhan rumah tangga dengan harga terjangkau.',
-        storeAddress: 'Jl. Ahmad Yani No. 50, Surabaya',
+        storeAddress: 'Jl. Ahmad Yani No. 50, Palu',
         operatingHours: '08:00 - 20:00',
 
         // Step 3: Documents

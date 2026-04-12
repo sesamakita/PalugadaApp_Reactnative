@@ -31,7 +31,7 @@
 
 .auth-logo {
     margin-bottom: 24px;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
 .auth-logo img {

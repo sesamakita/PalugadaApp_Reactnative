@@ -49,7 +49,7 @@ const Notifications = ({ onBack }) => {
             {/* Header */}
             <AppBar title="Notifikasi" onBack={onBack} />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             {/* Notif Content */}
             <div className="notif-content">

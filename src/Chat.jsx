@@ -53,7 +53,7 @@ const Chat = ({ onBack }) => {
                 rightIcon={<Search size={22} color="var(--primary)" />}
             />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             {/* Chat List */}
             <div className="chat-content">

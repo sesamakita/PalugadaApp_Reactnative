@@ -90,7 +90,7 @@ const StoreList = ({ onBack, onStoreClick, userLocation = 'Palu', products = [] 
     return (
         <div className="store-list-view">
             <AppBar title="Jelajah Toko UMKM" onBack={onBack} />
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             <div className="store-list-content">
                 <div className="store-search-container">

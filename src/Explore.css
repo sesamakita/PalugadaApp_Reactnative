@@ -9,10 +9,11 @@
     width: 100%;
     max-width: 450px;
     z-index: 1000;
-    height: 64px;
+    height: calc(64px + var(--safe-top));
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: var(--safe-top);
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -63,8 +64,8 @@
 }
 
 .explore-content {
-    padding: 64px 0 0;
-    /* Header height */
+    padding: calc(64px + var(--safe-top)) 0 0;
+    /* Header height + Safe area */
 }
 
 .explore-search-wrapper {

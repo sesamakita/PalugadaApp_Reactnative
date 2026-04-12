@@ -20,7 +20,7 @@ const Cart = ({ cartItems, onBack, onRemove, onCheckout, onUpdateQuantity }) => 
         <div className="cart-container">
             <AppBar title="Keranjang Saya" onBack={onBack} />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             <div className="scroll-content">
                 {cartItems.length === 0 ? (

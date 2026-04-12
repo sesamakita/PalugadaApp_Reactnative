@@ -23,7 +23,7 @@ const PublicStore = ({ store, products, onBack, onProductClick }) => {
                 rightIcon={<Share2 size={22} strokeWidth={1.5} />}
             />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             <div className="pg-store-hero">
                 <div className="pg-store-banner">

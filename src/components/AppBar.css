@@ -3,10 +3,10 @@
     top: 0;
     width: 100%;
     max-width: 450px;
-    height: 64px;
+    height: calc(64px + var(--safe-top));
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: var(--safe-top) 16px 0;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

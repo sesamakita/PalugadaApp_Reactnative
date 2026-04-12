@@ -127,7 +127,7 @@ const MyOrders = ({ onBack, onTrackOrder, onAddToCart }) => {
     return (
         <div className="my-orders-container">
             <AppBar title="Pesanan Saya" onBack={onBack} />
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             {/* Tabs */}
             <div className="orders-tabs">

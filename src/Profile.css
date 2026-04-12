@@ -2,8 +2,8 @@
     min-height: 100vh;
     background: var(--bg-main);
     padding-bottom: 20px;
-    padding-top: 64px;
-    /* Header height */
+    padding-top: calc(64px + var(--safe-top));
+    /* Header height + Safe area */
 }
 
 .profile-nav {
@@ -12,10 +12,11 @@
     width: 100%;
     max-width: 450px;
     z-index: 1000;
-    height: 64px;
+    height: calc(64px + var(--safe-top));
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: var(--safe-top);
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

@@ -12,7 +12,7 @@ const Favorites = ({ onBack, onProductClick, onAddToCart, favorites = [], onTogg
             {/* Header */}
             <AppBar title="Favorit Saya" onBack={onBack} />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top))' }}></div>
 
             <div className="favorites-content">
                 {favorites.length === 0 ? (

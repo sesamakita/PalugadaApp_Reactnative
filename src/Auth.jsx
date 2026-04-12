@@ -29,7 +29,9 @@ const Auth = ({ onLogin }) => {
         <div className="auth-container">
             <div className="auth-header">
                 <div className="auth-logo">
-                    <img src={logo} alt="Palugada Logo" />
+                    <div className="logo-badge">
+                        <img src={logo} alt="Palugada Logo" />
+                    </div>
                 </div>
                 <h1>{mode === 'login' ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}</h1>
                 <p>{mode === 'login' ? 'Masuk untuk lanjut belanja produk UMKM lokal Poso' : 'Gabung sekarang dan dukung UMKM lokal Sulawesi Tengah'}</p>

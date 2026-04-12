@@ -31,11 +31,25 @@
 
 .auth-logo {
     margin-bottom: 24px;
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    display: flex;
+    justify-content: center;
+}
+
+.logo-badge {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .auth-logo img {
-    height: 52px; /* Slightly larger logo */
+    height: 48px; /* Adjusted height to fit better in badge */
     width: auto;
 }
 

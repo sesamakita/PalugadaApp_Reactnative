@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 import logo from './assets/branding/palugada-logo-main.png';
@@ -12,6 +12,10 @@ const Auth = ({ onLogin }) => {
         name: '',
         phone: ''
     });
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [mode]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

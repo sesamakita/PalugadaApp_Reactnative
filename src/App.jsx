@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { Geolocation } from '@capacitor/geolocation'
 import { App as CapApp } from '@capacitor/app'
+import { StatusBar, Style } from '@capacitor/status-bar'
 import './App.css'
 import Tracking from './Tracking'
 import SellerDashboard from './SellerDashboard'
@@ -85,6 +86,19 @@ function App() {
   });
 
   useEffect(() => {
+    // Initialize StatusBar for immersive experience
+    const initStatusBar = async () => {
+      try {
+        if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+          await StatusBar.setOverlaysWebView({ overlay: true });
+          await StatusBar.setStyle({ style: Style.Light });
+        }
+      } catch (err) {
+        console.error('StatusBar init error:', err);
+      }
+    };
+    initStatusBar();
+
     localStorage.setItem('user_favorites', JSON.stringify(favorites));
   }, [favorites]);
 

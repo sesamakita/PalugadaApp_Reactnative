@@ -10,7 +10,8 @@ import {
     Truck,
     ChevronRight,
     Search,
-    Plus
+    Plus,
+    ArrowRight
 } from 'lucide-react';
 import './ProductDetail.css';
 import AppBar from './components/AppBar';
@@ -42,6 +43,7 @@ const ProductDetail = ({ product, onBack, onAddToCart, onBuyNow, isFavorite, onT
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <button
                             onClick={onToggleFavorite}
+                            className="btn-icon-action"
                             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex' }}
                         >
                             <Heart
@@ -53,6 +55,7 @@ const ProductDetail = ({ product, onBack, onAddToCart, onBuyNow, isFavorite, onT
                         </button>
                         <button
                             onClick={() => shareProduct(product)}
+                            className="btn-icon-action"
                             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex' }}
                         >
                             <Share2 size={22} strokeWidth={1.5} />
@@ -81,28 +84,53 @@ const ProductDetail = ({ product, onBack, onAddToCart, onBuyNow, isFavorite, onT
                     </div>
                 </div>
 
-                <div className="detail-section shipping-section card" onClick={() => {}}>
-                    <div className="section-header-row">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            {shippingInfo.icon}
-                            <h3 style={{ margin: 0 }}>Pengiriman</h3>
+                <div className="detail-section">
+                    <h3>Informasi Pengiriman</h3>
+                    <div className="shipping-section card" onClick={() => {}}>
+                        <div className="shipping-info-wrapper">
+                        {/* Row 1: Service Type */}
+                        <div className="shipping-row service-row">
+                            <div className="shipping-icon-circle">
+                                {shippingInfo.icon}
+                            </div>
+                            <div className="shipping-label-group">
+                                <span className="label-tiny">Layanan Khusus</span>
+                                <span className="shipping-name-bold">{shippingInfo.type}</span>
+                            </div>
                         </div>
-                        <ChevronRight size={18} color="#94a3b8" />
-                    </div>
-                    <div className="shipping-info-box">
-                        <div className="shipping-main">
-                            <span className="shipping-type">{shippingInfo.type}</span>
-                            <span className="shipping-cost">{shippingInfo.cost}</span>
+
+                        {/* Row 2: Route Path */}
+                        <div className="shipping-row route-row">
+                            <div className="route-path">
+                                <div className="route-point origin">
+                                    <span className="point-dot"></span>
+                                    <span className="point-name">{product.location}</span>
+                                </div>
+                                <div className="route-line-connector">
+                                    <ArrowRight size={14} color="#94a3b8" />
+                                </div>
+                                <div className="route-point destination">
+                                    <span className="point-dot destination"></span>
+                                    <span className="point-name">{savedLoc}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="shipping-sub">
-                            <MapPin size={12} />
-                            <span>Dari <strong>{product.location}</strong> ke <strong>{savedLoc}</strong></span>
-                        </div>
-                        <div className="shipping-eta">
-                            <span>Estimasi Tiba: {shippingInfo.eta}</span>
+
+                        {/* Row 3: Metrics */}
+                        <div className="shipping-metrics-row">
+                            <div className="metric-item">
+                                <span className="label-tiny">Biaya Kirim</span>
+                                <span className="metric-value cost">{shippingInfo.cost}</span>
+                            </div>
+                            <div className="metric-divider"></div>
+                            <div className="metric-item">
+                                <span className="label-tiny">Estimasi Tiba</span>
+                                <span className="metric-value eta">{shippingInfo.eta}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <div className="detail-section">
                     <h3>Deskripsi Produk</h3>
@@ -113,23 +141,52 @@ const ProductDetail = ({ product, onBack, onAddToCart, onBuyNow, isFavorite, onT
                 </div>
 
                 <div className="detail-section">
-                    <h3>Info Penjual</h3>
-                    <div className="seller-box card" onClick={() => onAddToCart && onBack('public-store', { name: "Toko Berkah " + product.location, location: product.location })} style={{ cursor: 'pointer' }}>
-                        <div className="seller-main-info">
-                            <div className="seller-avatar">
-                                <Store size={24} color="var(--primary)" />
+                    <h3>Informasi Penjual</h3>
+                    <div className="seller-box card" onClick={() => onBack('public-store', { name: "Toko Berkah " + product.location, location: product.location })} style={{ cursor: 'pointer' }}>
+                        <div className="seller-info-content">
+                            {/* Profile Information Row */}
+                            <div className="seller-profile-row">
+                                <div className="seller-avatar">
+                                    <Store size={22} color="var(--primary)" />
+                                </div>
+                                <div className="seller-text-group">
+                                    <span className="label-tiny">Penjual Terverifikasi</span>
+                                    <div className="seller-name">Toko Berkah {product.location}</div>
+                                    <div className="seller-location-sub">{product.location}</div>
+                                </div>
+                                <div className="seller-action-pin">
+                                    <button 
+                                        className="btn-chat-mini" 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onBack('chat', { name: "Toko Berkah " + product.location });
+                                        }}
+                                    >
+                                        Chat
+                                    </button>
+                                </div>
                             </div>
-                            <div className="seller-info">
-                                <div className="seller-name">Toko Berkah {product.location}</div>
-                                <div className="seller-status">Online 5 menit yang lalu</div>
+
+                            {/* Store Stats Metrics Row */}
+                            <div className="seller-stats-row">
+                                <div className="stat-item centered">
+                                    <span className="label-tiny">Rating Toko</span>
+                                    <div className="stat-value-group">
+                                        <Star size={14} color="#fbbf24" fill="#fbbf24" />
+                                        <span className="stat-value">4.8 / 5.0</span>
+                                    </div>
+                                </div>
+                                <div className="metric-divider-v"></div>
+                                <div className="stat-item centered">
+                                    <span className="label-tiny">Waktu Respon</span>
+                                    <span className="stat-value">± 10 Menit</span>
+                                </div>
+                                <div className="metric-divider-v"></div>
+                                <div className="stat-item centered">
+                                    <span className="label-tiny">Status</span>
+                                    <span className="stat-value online-tag">Online</span>
+                                </div>
                             </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <button className="btn-chat-mini" onClick={(e) => {
-                                e.stopPropagation();
-                                onBack('chat', { name: "Toko Berkah " + product.location });
-                            }}>Chat</button>
-                            <ChevronRight size={20} color="#94a3b8" />
                         </div>
                     </div>
                 </div>

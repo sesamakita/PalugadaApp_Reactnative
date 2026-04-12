@@ -32,7 +32,7 @@ const Auth = ({ onLogin }) => {
                     <img src={logo} alt="Palugada Logo" />
                 </div>
                 <h1>{mode === 'login' ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}</h1>
-                <p>{mode === 'login' ? 'Masuk untuk lanjut belanja produk UMKM' : 'Gabung sekarang dan dukung UMKM lokal'}</p>
+                <p>{mode === 'login' ? 'Masuk untuk lanjut belanja produk UMKM lokal Poso' : 'Gabung sekarang dan dukung UMKM lokal Sulawesi Tengah'}</p>
             </div>
 
             <form className="auth-form" onSubmit={handleSubmit}>
@@ -110,12 +110,12 @@ const Auth = ({ onLogin }) => {
                 </button>
 
                 <button type="button" className="guest-btn" onClick={onLogin}>
-                    Masuk sebagai Tamu (Prototyping)
+                    Masuk Tanpa Akun
                 </button>
             </form>
 
             <div className="auth-divider">
-                <span>Atau {mode === 'login' ? 'masuk' : 'daftar'} dengan</span>
+                <span>Atau</span>
             </div>
 
             <div className="social-auth">

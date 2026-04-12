@@ -4,7 +4,7 @@
     min-height: 100vh;
     background: white;
     padding-bottom: 90px;
-    padding-top: 64px;
+    padding-top: calc(64px + env(safe-area-inset-top));
     /* Header height */
     width: 100%;
     overflow-x: hidden;
@@ -16,11 +16,11 @@
     width: 100%;
     max-width: 450px;
     z-index: 1000;
-    height: 64px;
+    height: calc(64px + env(safe-area-inset-top));
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 16px 12px;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -138,20 +138,28 @@
 .seller-box {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    transition: background 0.2s ease, transform 0.2s ease;
+    justify-content: space-between;
+    padding: 16px;
+    margin-top: 12px;
 }
 
-.seller-box:active {
-    background: #f1f5f9;
-    transform: scale(0.98);
+.seller-info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
 }
 
-.seller-main-info {
+.seller-profile-row {
     display: flex;
     align-items: center;
     gap: 12px;
+    width: 100%;
+}
+
+.seller-action-pin {
+    margin-left: auto;
+    padding-right: 4px;
 }
 
 .seller-avatar {
@@ -162,16 +170,67 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.seller-text-group {
+    display: flex;
+    flex-direction: column;
 }
 
 .seller-name {
     font-weight: 700;
+    font-size: 15px;
     color: var(--text-main);
 }
 
-.seller-status {
+.seller-location-sub {
     font-size: 12px;
     color: #94a3b8;
+}
+
+/* Seller Stats Row (Horizontal Metrics) */
+.seller-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.stat-item.centered {
+    align-items: center;
+    text-align: center;
+}
+
+.stat-value-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.stat-value {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.stat-value.online-tag {
+    color: var(--primary);
+}
+
+.metric-divider-v {
+    width: 1px;
+    height: 20px;
+    background: #e2e8f0;
+    margin: 0 12px;
 }
 
 .btn-chat-mini {
@@ -189,72 +248,154 @@
     color: white;
 }
 
-/* Shipping Section */
+/* Shipping Redesign: Precision Layout */
 .shipping-section {
     padding: 16px;
     margin-bottom: 20px;
 }
 
-.shipping-info-box {
-    margin-top: 12px;
+.shipping-info-wrapper {
+    margin-top: 14px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
 }
 
-.shipping-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.shipping-type {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--text-main);
-}
-
-.shipping-cost {
-    font-weight: 800;
-    color: var(--primary-dark);
-    font-size: 14px;
-}
-
-.shipping-sub {
+.shipping-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    color: #64748b;
-    font-size: 12px;
+    gap: 12px;
 }
 
-.shipping-sub strong {
+.shipping-icon-circle {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.shipping-label-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-tiny {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.shipping-name-bold {
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-main);
 }
 
-.shipping-eta {
+/* Route Path Styles */
+.route-row {
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--radius-sm);
+    margin-left: 4px;
+}
+
+.route-path {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.route-point {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.point-dot {
+    width: 8px;
+    height: 8px;
+    background: #cbd5e1;
+    border-radius: 50%;
+}
+
+.point-dot.destination {
+    background: var(--primary);
+    box-shadow: 0 0 6px var(--primary);
+}
+
+.point-name {
     font-size: 12px;
-    background: rgba(14, 173, 152, 0.05);
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    color: var(--primary-dark);
     font-weight: 600;
-    align-self: flex-start;
+    color: var(--text-main);
+}
+
+.route-line-connector {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px dashed #cbd5e1;
+    height: 1px;
+    margin: 0 4px;
+    position: relative;
+    top: -1px;
+}
+
+/* Metrics Styles */
+.shipping-metrics-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.metric-divider {
+    width: 1px;
+    height: 24px;
+    background: #e2e8f0;
+    margin: 0 16px;
+}
+
+.metric-value {
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.metric-value.cost {
+    color: var(--primary-dark);
+}
+
+.metric-value.eta {
+    color: #475569;
 }
 
 .shipping-icon-trans {
     background: rgba(251, 176, 59, 0.1);
     padding: 6px;
-    border-radius: 8px;
+    border-radius: 50%;
     display: flex;
 }
 
-/* Global Interactive State */
-.card:active {
-    background: rgba(0, 0, 0, 0.02);
-    transform: scale(0.99);
-    transition: all 0.1s ease;
+/* Global Card Styling with Soft Border and Fill (More Visible) */
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #f8fafc; /* More visible soft filled background */
+    border-radius: var(--radius-md);
 }
 
 .btn-cart-minimal {
@@ -269,11 +410,6 @@
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.2s ease;
-}
-
-.btn-cart-minimal:active {
-    background: var(--primary);
-    color: white;
 }
 
 .cart-icon-stack {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ChevronLeft,
     ChevronRight,
@@ -19,17 +19,19 @@ import AppBar from './components/AppBar';
 
 const CourierRegistration = ({ onBack, onComplete }) => {
     const [step, setStep] = useState(1); // 1: Personal Info, 2: Vehicle, 3: Documents, 4: Zone Selection, 5: Review
+    const [currentLocation, setCurrentLocation] = useState('');
 
     // 🎯 DEMO MODE: Pre-filled data untuk testing visual
     const [formData, setFormData] = useState({
         // Personal Info - PRE-FILLED
         fullName: 'Deni Indrayana',
         phone: '081234567890',
-        email: 'budi.santoso@email.com',
+        email: 'deni.apps@palugada.com',
         address: 'Jl. Malonda No. 123, Palu Barat, Palu',
 
         // Vehicle Info - PRE-FILLED
         vehicleType: 'motorcycle', // motorcycle, car, bicycle
+        serviceType: 'local', // local (Intra-Kabupaten), trans (Antar-Kabupaten)
         plateNumber: 'DN 1234 AB',
         vehicleBrand: 'Honda Vario 150',
         vehicleColor: 'Hitam',
@@ -43,18 +45,44 @@ const CourierRegistration = ({ onBack, onComplete }) => {
 
         // Zone Selection - PRE-FILLED
         city: 'Palu',
-        preferredZones: ['PALU-ZONE-001', 'PALU-ZONE-002'],
+        preferredZones: ['PALU'], // Store regency IDs
 
         // Availability - PRE-FILLED
         availability: 'fulltime' // fulltime, parttime, weekend
     });
 
-    const zones = [
-        { id: 'PALU-ZONE-001', name: 'Palu Timur - Mantikulore', districts: ['Besusu', 'Lolu', 'Tanamodindi'] },
-        { id: 'PALU-ZONE-002', name: 'Palu Barat - Ulujadi', districts: ['Kabonena', 'Silae', 'Tipulu'] },
-        { id: 'PALU-ZONE-003', name: 'Palu Selatan - Tatanga', districts: ['Birobuli', 'Tatura', 'Palupi'] },
-        { id: 'PALU-ZONE-004', name: 'Palu Utara - Tawaeli', districts: ['Mamboro', 'Panau', 'Lambara'] }
+    const sultengRegencies = [
+        { id: 'PALU', name: 'Palu', type: 'Kota' },
+        { id: 'DONGGALA', name: 'Donggala', type: 'Kabupaten' },
+        { id: 'PARIMO', name: 'Parimo (Parigi Moutong)', type: 'Kabupaten' },
+        { id: 'SIGI', name: 'Sigi', type: 'Kabupaten' },
+        { id: 'POSO', name: 'Poso', type: 'Kabupaten' },
+        { id: 'TOUNA', name: 'Touna (Tojo Una-Una)', type: 'Kabupaten' },
+        { id: 'BANGGAI', name: 'Banggai', type: 'Kabupaten' },
+        { id: 'BANGKEP', name: 'Bangkep (Banggai Kepulauan)', type: 'Kabupaten' },
+        { id: 'BALUT', name: 'Balut (Banggai Laut)', type: 'Kabupaten' },
+        { id: 'MORUT', name: 'Morut (Morowali Utara)', type: 'Kabupaten' },
+        { id: 'MOROWALI', name: 'Morowali', type: 'Kabupaten' },
+        { id: 'BUOL', name: 'Buol', type: 'Kabupaten' },
+        { id: 'TOLITOLI', name: 'Toli-toli', type: 'Kabupaten' }
     ];
+
+    // Detect current location from App state
+    useEffect(() => {
+        const savedLoc = localStorage.getItem('last_known_location');
+        if (savedLoc) {
+            setCurrentLocation(savedLoc);
+            
+            // Auto-select the detected region if no zone is selected yet
+            const matchedRegency = sultengRegencies.find(r => r.name.toLowerCase().includes(savedLoc.toLowerCase()));
+            if (matchedRegency && formData.preferredZones.length === 0) {
+                setFormData(prev => ({
+                    ...prev,
+                    preferredZones: [matchedRegency.id]
+                }));
+            }
+        }
+    }, []);
 
     const handleInputChange = (field, value) => {
         setFormData({ ...formData, [field]: value });
@@ -213,6 +241,32 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                         </div>
 
                         <div className="form-group">
+                            <label>Tipe Layanan Delivery</label>
+                            <div className="service-type-selector">
+                                <button
+                                    className={`service-option ${formData.serviceType === 'local' ? 'active' : ''}`}
+                                    onClick={() => handleInputChange('serviceType', 'local')}
+                                >
+                                    <div className="service-meta">
+                                        <strong>Palugada Lokal</strong>
+                                        <span>Intra-Kabupaten (Jarak Dekat)</span>
+                                    </div>
+                                    <CheckCircle size={20} className="check-icon" />
+                                </button>
+                                <button
+                                    className={`service-option ${formData.serviceType === 'trans' ? 'active' : ''}`}
+                                    onClick={() => handleInputChange('serviceType', 'trans')}
+                                >
+                                    <div className="service-meta">
+                                        <strong>Palugada Trans-Sulteng</strong>
+                                        <span>Antar-Kabupaten (Logistik)</span>
+                                    </div>
+                                    <CheckCircle size={20} className="check-icon" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
                             <label>Nomor Plat Kendaraan</label>
                             <input
                                 type="text"
@@ -293,29 +347,40 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                 {/* Step 4: Zone Selection */}
                 {step === 4 && (
                     <div className="registration-step">
-                        <h2>Pilih Zona Layanan</h2>
-                        <p className="step-description">Pilih minimal 1 zona yang Anda kuasai</p>
+                        <h2>Pilih Wilayah Operasional</h2>
+                        <p className="step-description">
+                            {formData.serviceType === 'local' 
+                                ? 'Pilih Kabupaten/Kota domisili Anda' 
+                                : 'Pilih semua Kabupaten yang masuk rute Anda'}
+                        </p>
 
-                        <div className="zone-list">
-                            {zones.map(zone => (
-                                <div
-                                    key={zone.id}
-                                    className={`zone-card ${formData.preferredZones.includes(zone.id) ? 'selected' : ''}`}
-                                    onClick={() => toggleZone(zone.id)}
-                                >
-                                    <div className="zone-header">
-                                        <MapPin size={20} color="var(--primary)" />
-                                        <h4>{zone.name}</h4>
+                        <div className="zone-list grid">
+                            {sultengRegencies.map(zone => {
+                                const isCurrentLocation = currentLocation && zone.name.toLowerCase().includes(currentLocation.toLowerCase());
+                                return (
+                                    <div
+                                        key={zone.id}
+                                        className={`zone-card-mini ${formData.preferredZones.includes(zone.id) ? 'selected' : ''} ${isCurrentLocation ? 'is-current' : ''}`}
+                                        onClick={() => toggleZone(zone.id)}
+                                    >
+                                        <div className="zone-card-header">
+                                            <MapPin size={16} color={formData.preferredZones.includes(zone.id) ? 'var(--primary)' : '#94a3b8'} />
+                                            {isCurrentLocation && (
+                                                <span className="current-loc-badge">Lokasi Anda</span>
+                                            )}
+                                        </div>
+                                        <div className="zone-info-mini">
+                                            <h4>{zone.name}</h4>
+                                            <span>{zone.type}</span>
+                                        </div>
                                         {formData.preferredZones.includes(zone.id) && (
-                                            <CheckCircle size={20} color="var(--primary)" />
+                                            <CheckCircle size={16} color="var(--primary)" />
                                         )}
                                     </div>
-                                    <div className="zone-districts">
-                                        {zone.districts.join(' • ')}
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
+        
 
                         <div className="form-group">
                             <label>Ketersediaan Waktu</label>
@@ -369,9 +434,15 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                         </div>
 
                         <div className="review-section card">
-                            <h3>Kendaraan</h3>
+                            <h3>Kendaraan & Layanan</h3>
                             <div className="review-item">
-                                <span>Jenis</span>
+                                <span>Jenis Layanan</span>
+                                <strong style={{ color: 'var(--primary)' }}>
+                                    {formData.serviceType === 'local' ? 'Palugada Lokal' : 'Palugada Trans-Sulteng'}
+                                </strong>
+                            </div>
+                            <div className="review-item">
+                                <span>Jenis Kendaraan</span>
                                 <strong>{formData.vehicleType === 'motorcycle' ? 'Motor' : 'Mobil'}</strong>
                             </div>
                             <div className="review-item">
@@ -385,16 +456,18 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                         </div>
 
                         <div className="review-section card">
-                            <h3>Zona Layanan</h3>
-                            {formData.preferredZones.map(zoneId => {
-                                const zone = zones.find(z => z.id === zoneId);
-                                return (
-                                    <div key={zoneId} className="review-zone">
-                                        <MapPin size={16} />
-                                        <span>{zone.name}</span>
-                                    </div>
-                                );
-                            })}
+                            <h3>Wilayah Operasional</h3>
+                            <div className="review-zones-grid">
+                                {formData.preferredZones.map(zoneId => {
+                                    const zone = sultengRegencies.find(z => z.id === zoneId);
+                                    return (
+                                        <div key={zoneId} className="review-zone-tag">
+                                            <MapPin size={14} />
+                                            <span>{zone?.name || zoneId}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         <div className="info-box success">

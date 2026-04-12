@@ -41,9 +41,16 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
         { label: 'Pendapatan Bersih Hari Ini', value: `Rp ${netDailyIncome.toLocaleString('id-ID')}`, color: '#fbb03b' },
     ];
 
+    const courierInfo = {
+        name: 'Deni Indrayana',
+        serviceType: 'local', // local, trans
+        fleet: 'Motorcycle'
+    };
+
     const tasks = [
-        { id: '#T-992', shop: 'Toko Batik Jaya', customer: 'Andi Pratama', status: 'Siap Pickup', income: 'Rp 15.000', shopAddr: 'Pasar Baru Blok A', custAddr: 'Jl. Ahmad Yani No. 10', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2504, lng: 112.7688 },
-        { id: '#T-991', shop: 'Warung Bu Siti', customer: 'Maya Sari', status: 'Dalam Antar', income: 'Rp 12.000', shopAddr: 'Jl. Mawar No. 4', custAddr: 'Jl. Sudirman Gg. 5', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2575, lng: 112.7521 },
+        { id: '#T-992', shop: 'Toko Batik Jaya', customer: 'Andi Pratama', status: 'Siap Pickup', type: 'local', income: 'Rp 15.000', shopAddr: 'Pasar Baru Blok A', custAddr: 'Jl. Ahmad Yani No. 10', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2504, lng: 112.7688 },
+        { id: '#T-991', shop: 'Warung Bu Siti', customer: 'Maya Sari', status: 'Dalam Antar', type: 'local', income: 'Rp 12.000', shopAddr: 'Jl. Mawar No. 4', custAddr: 'Jl. Sudirman Gg. 5', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2575, lng: 112.7521 },
+        { id: '#T-985', shop: 'Gudang Logistik Palu', customer: 'Toko Berkah Poso', status: 'Siap Pickup', type: 'trans', income: 'Rp 245.000', shopAddr: 'Kawasan Pergudangan Palu', custAddr: 'Jl. Trans Sulawesi, Poso', shopPhone: '628123456789', custPhone: '628987654321', lat: -1.4265, lng: 120.6588 },
     ];
 
     const handleTaskClick = (task) => {
@@ -128,6 +135,12 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
             </div>
 
             {/* Status Toggle - Correct Placement Above Stats */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <div className={`service-badge ${courierInfo.serviceType}`}>
+                    {courierInfo.serviceType === 'local' ? '📦 Palugada Lokal' : '🚛 Palugada Trans-Sulteng'}
+                </div>
+            </div>
+            
             <div className={`availability-bar top ${isOnline ? 'online' : 'offline'}`} onClick={() => setIsOnline(!isOnline)}>
                 <div className="status-text">
                     <div className={`status-dot ${isOnline ? 'online' : 'offline'}`}></div>
@@ -178,7 +191,12 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
                     {tasks.map((task, j) => (
                         <div key={j} className="order-card card" onClick={() => handleTaskClick(task)}>
                             <div className="order-header">
-                                <span className="order-id">{task.id}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span className="order-id">{task.id}</span>
+                                    <span className={`task-type-tag ${task.type}`}>
+                                        {task.type === 'local' ? '📍 Lokal' : '🚛 Trans'}
+                                    </span>
+                                </div>
                                 <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>{task.status}</span>
                             </div>
                             <div className="order-body">

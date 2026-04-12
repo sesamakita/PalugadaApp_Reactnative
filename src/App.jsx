@@ -43,6 +43,24 @@ import SellerRegistration from './SellerRegistration'
 import CourierProfile from './CourierProfile'
 import CourierCommunity from './CourierCommunity'
 import MyOrders from './MyOrders'
+import StoreList from './StoreList'
+
+const regionalMapping = {
+  'Palu': 'Palu',
+  'Donggala': 'Donggala',
+  'Parigi Moutong': 'Parimo',
+  'Sigi': 'Sigi',
+  'Poso': 'Poso',
+  'Tojo Una-Una': 'Touna',
+  'Banggai': 'Banggai',
+  'Banggai Kepulauan': 'Bangkep',
+  'Banggai Laut': 'Balut',
+  'Morowali Utara': 'Morut',
+  'Morowali': 'Morowali',
+  'Buol': 'Buol',
+  'Tolitoli': 'Toli-toli',
+  'Toli-Toli': 'Toli-toli'
+};
 
 function App() {
   const [showSplash, setShowSplash] = useState(true)
@@ -52,7 +70,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedStore, setSelectedStore] = useState(null)
   const [cartItems, setCartItems] = useState([])
-  const [userLocation, setUserLocation] = useState('Palu')
+  const [userLocation, setUserLocation] = useState('SULTENG')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
   const [walletRole, setWalletRole] = useState('buyer') // 'buyer', 'seller', 'courier'
   const [walletBackView, setWalletBackView] = useState('profile') // view to go back to
@@ -138,6 +156,15 @@ function App() {
     setView('cart');
   };
 
+  const handleBuyNow = (product) => {
+    setCartItems(prevItems => {
+      const existing = prevItems.find(item => item.id === product.id);
+      if (existing) return prevItems;
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
+    setView('checkout');
+  };
+
   const handleUpdateCartQuantity = (productId, change) => {
     setCartItems(prevItems => {
       return prevItems.map(item => {
@@ -157,7 +184,7 @@ function App() {
   }
 
   // Views that are primary tabs and should keep the bottom nav
-  const isTabVisible = ['home', 'explore', 'tracking', 'profile'].includes(view)
+  const isTabVisible = ['home', 'explore', 'tracking', 'profile', 'store-list'].includes(view)
 
   const renderContent = () => {
     switch (view) {
@@ -216,6 +243,7 @@ function App() {
               }
             }}
             onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
             isFavorite={favorites.some(f => f.id === selectedProduct.id)}
             onToggleFavorite={() => handleToggleFavorite(selectedProduct)}
           />
@@ -251,7 +279,22 @@ function App() {
           />
         )
       case 'explore':
-        return <Explore onProductClick={handleProductClick} />
+        return <Explore
+          onProductClick={handleProductClick}
+          onSeeAllStores={() => setView('store-list')}
+        />
+      case 'store-list':
+        return (
+          <StoreList
+            onBack={() => setView('home')}
+            onStoreClick={(store) => {
+              setSelectedStore(store);
+              setView('public-store');
+            }}
+            userLocation={userLocation}
+            products={products}
+          />
+        )
       case 'profile':
         return <Profile
           onNavigate={(target) => {
@@ -302,13 +345,20 @@ function App() {
                       width: '6px',
                       height: '6px',
                       borderRadius: '50%',
-                      background: 'var(--primary)'
+                      background: 'var(--primary)',
+                      boxShadow: '0 0 8px var(--primary)'
                     }}></div>
-                    <span style={{
-                      fontSize: '11px',
-                      color: 'var(--text-muted)',
-                      fontWeight: '700'
-                    }}>{isLoadingLocation ? 'Mencari lokasi...' : userLocation}</span>
+                    <span 
+                      onClick={() => !isLoadingLocation && fetchLocation()}
+                      style={{
+                        fontSize: '13px',
+                        color: 'var(--primary)',
+                        fontWeight: '800',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer'
+                      }}
+                    >{isLoadingLocation ? 'MENCARI...' : userLocation}</span>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -413,6 +463,16 @@ function App() {
                 <div className="hero-img">🏠</div>
               </div>
 
+              {/* Stores Quick Link */}
+              <div
+                className="section-title"
+                style={{ marginTop: '24px' }}
+                onClick={() => setView('store-list')}
+              >
+                <h3>Jelajah Toko UMKM</h3>
+                <span className="view-all">Lihat Semua</span>
+              </div>
+
               {/* Product Section */}
               <div className="section-title">
                 <h3>Terdekat dari Anda</h3>
@@ -462,19 +522,14 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false)
-    }, 3000)
-    return () => clearTimeout(timer)
-  }, [])
+  const [splashMessage, setSplashMessage] = useState('Menginisialisasi...')
 
   useEffect(() => {
     const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()
 
     const reverseGeocode = async (latitude, longitude) => {
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      const timeoutId = setTimeout(() => controller.abort(), 8000)
 
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
@@ -485,39 +540,54 @@ function App() {
         const data = await response.json()
 
         if (data.address) {
-          // Logika Sangat Kuat untuk Indonesia:
-          // Kabupaten/Kota sering ada di 'state_district', 'county', 'city', atau 'municipality'
-          const state = data.address.state;
-          const state_district = data.address.state_district;
-          const county = data.address.county;
-          const city = data.address.city || data.address.municipality;
-          const town = data.address.town;
-          const city_district = data.address.city_district;
+          // Flatten all address values into a single array of strings
+          const addressValues = Object.values(data.address).map(v => v.toString().toLowerCase());
+          const state = (data.address.state || '').toLowerCase();
 
-          let loc = '';
+          // Define the 13 required regions with their branding names
+          // Priority ordered (most specific first where needed, like Bangkep vs Banggai)
+          const searchKeywords = [
+            { key: 'palu', brand: 'Palu' },
+            { key: 'donggala', brand: 'Donggala' },
+            { key: 'parigi moutong', brand: 'Parimo' },
+            { key: 'sigi', brand: 'Sigi' },
+            { key: 'poso', brand: 'Poso' },
+            { key: 'tojo una-una', brand: 'Touna' },
+            { key: 'banggai kepulauan', brand: 'Bangkep' },
+            { key: 'banggai laut', brand: 'Balut' },
+            { key: 'banggai', brand: 'Banggai' },
+            { key: 'morowali utara', brand: 'Morut' },
+            { key: 'morowali', brand: 'Morowali' },
+            { key: 'buol', brand: 'Buol' },
+            { key: 'tolitoli', brand: 'Toli-toli' },
+            { key: 'toli-toli', brand: 'Toli-toli' }
+          ];
 
-          // Prioritas 1: Ambil Kabupaten/Kota (biasanya di county atau state_district)
-          let candidate = county || state_district || city || town;
+          let foundBrandedName = null;
 
-          // Jika kandidat cuma nama provinsi, cari pilihan lain yang lebih lokal
-          if (candidate && state && candidate.toLowerCase() === state.toLowerCase()) {
-            candidate = city_district || town || null;
+          // Search for any of our keywords in ANY field returned by Nominatim
+          for (const item of searchKeywords) {
+            if (addressValues.some(val => val.includes(item.key))) {
+              foundBrandedName = item.brand;
+              break;
+            }
           }
 
-          if (candidate) {
-            loc = candidate;
-          } else if (state) {
-            loc = state;
-          } else {
-            loc = 'Lokasi Terdeteksi';
+          // Final Location Determination
+          let finalLoc = foundBrandedName;
+
+          if (!finalLoc) {
+            // Fallback: If no regency detected, use a cleaned version of the most likely candidate
+            const county = data.address.county || data.address.region || data.address.state_district;
+            const city = data.address.city || data.address.municipality;
+            const town = data.address.town || data.address.village;
+            
+            let fallback = county || city || town || state || 'SULTENG';
+            finalLoc = fallback.replace(/Kabupaten |Kota |Regency |Kab\. /gi, '').trim();
           }
 
-          // Standarisasi Teks: Pastikan kata "Kabupaten" atau "Kota" jelas jika ada
-          // Tapi kita biarkan aslinya dulu karena Nominatim biasanya sudah memberi prefix "Kabupaten "
-          
-          setUserLocation(loc)
-          localStorage.setItem('last_known_location', loc)
-          localStorage.setItem('last_known_type', candidate ? 'local' : 'province')
+          setUserLocation(finalLoc)
+          localStorage.setItem('last_known_location', finalLoc)
         }
       } catch (err) {
         console.error('Reverse geocode error:', err);
@@ -530,39 +600,43 @@ function App() {
 
         if (isNative) {
           // Native Capacitor Geolocation
+          setSplashMessage('Meminta izin lokasi...')
           const permStatus = await Geolocation.checkPermissions()
           if (permStatus.location !== 'granted') {
             const requestStatus = await Geolocation.requestPermissions()
             if (requestStatus.location !== 'granted') {
               setUserLocation('Lokasi Tidak Aktif')
-              setIsLoadingLocation(false)
               return
             }
           }
 
+          setSplashMessage('sedang mempersiapkan aplikasi sesuai lokasi')
           const coordinates = await Geolocation.getCurrentPosition({
-            enableHighAccuracy: true, // Diaktifkan agar lebih presisi
-            timeout: 10000,
-            maximumAge: 3600000
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 5 * 60 * 1000
           })
 
           await reverseGeocode(coordinates.coords.latitude, coordinates.coords.longitude)
         } else {
           // Web browser fallback
+          setSplashMessage('Meminta izin lokasi...')
           if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-              async (position) => {
-                await reverseGeocode(position.coords.latitude, position.coords.longitude)
-                setIsLoadingLocation(false)
-              },
-              () => {
-                const cached = localStorage.getItem('last_known_location')
-                if (!cached) setUserLocation('Palu')
-                setIsLoadingLocation(false)
-              },
-              { enableHighAccuracy: true, timeout: 10000, maximumAge: 3600000 }
-            )
-            return
+            return new Promise((resolve) => {
+              navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                  setSplashMessage('sedang mempersiapkan aplikasi sesuai lokasi')
+                  await reverseGeocode(position.coords.latitude, position.coords.longitude)
+                  resolve()
+                },
+                () => {
+                  const cached = localStorage.getItem('last_known_location')
+                  if (!cached) setUserLocation('SULTENG')
+                  resolve()
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 300000 }
+              )
+            })
           } else {
             setUserLocation('Palu')
           }
@@ -570,15 +644,28 @@ function App() {
       } catch (error) {
         console.error('Error getting geolocation:', error)
         const cached = localStorage.getItem('last_known_location')
-        if (!cached) {
-          setUserLocation('Palu')
-        }
+        if (!cached) setUserLocation('Palu')
       } finally {
         setIsLoadingLocation(false)
       }
     }
 
-    fetchLocation()
+    const initializeApp = async () => {
+      const startTime = Date.now();
+      
+      // Start location fetch
+      await fetchLocation();
+      
+      // Ensure splash shows for at least 3 seconds for look and feel
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, 3000 - elapsedTime);
+      
+      setTimeout(() => {
+        setShowSplash(false);
+      }, remainingTime);
+    }
+
+    initializeApp()
 
     // Listen for app resume (native only)
     let resumeListener
@@ -596,7 +683,7 @@ function App() {
   }, [])
 
   if (showSplash) {
-    return <SplashScreen version="1.0.2-alpha" />
+    return <SplashScreen version="1.0.2-alpha" message={splashMessage} />
   }
 
   if (!isLoggedIn) {

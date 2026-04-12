@@ -173,6 +173,129 @@
     color: var(--text-primary);
 }
 
+/* --- Expanded Delivery System & Zone Grid Styles --- */
+
+.service-type-selector {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.service-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    text-align: left;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.service-option.active {
+    border-color: var(--primary);
+    background: rgba(14, 173, 152, 0.05);
+}
+
+.service-meta strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.service-meta span {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.service-option .check-icon {
+    color: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.service-option.active .check-icon {
+    opacity: 1;
+}
+
+.zone-list.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.zone-card-mini {
+    background: white;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zone-card-mini.selected {
+    border-color: var(--primary);
+    background: rgba(14, 173, 152, 0.05);
+}
+
+.zone-card-mini.is-current {
+    border-color: var(--secondary);
+    background: rgba(251, 176, 59, 0.03);
+}
+
+.zone-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.current-loc-badge {
+    background: var(--secondary);
+    color: white;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.zone-info-mini h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.zone-info-mini span {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.review-zones-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.review-zone-tag {
+    background: rgba(14, 173, 152, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--primary-dark);
+}
+
 /* Upload Grid */
 .upload-grid {
     display: grid;
@@ -344,6 +467,43 @@
 
 .availability-option.active span {
     color: rgba(255, 255, 255, 0.9);
+}
+
+ /* --- Courier Dashboard Expanded Styles --- */
+
+.service-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.service-badge.local {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.service-badge.trans {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+}
+
+.task-type-tag {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.task-type-tag.local {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.task-type-tag.trans {
+    background: #f3e8ff;
+    color: #7e22ce;
 }
 
 /* Review Section */

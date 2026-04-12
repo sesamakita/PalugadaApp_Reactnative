@@ -2,7 +2,7 @@ import React from 'react';
 import { Search, Filter, Utensils, Shirt, Gem, Briefcase, Zap, Store, Star, MapPin } from 'lucide-react';
 import './Explore.css';
 
-const Explore = ({ onProductClick }) => {
+const Explore = ({ onProductClick, onSeeAllStores }) => {
     const base = import.meta.env.BASE_URL
     const categoryGrid = [
         { name: 'Kuliner', icon: <Utensils size={24} />, color: '#ff6b6b' },
@@ -65,7 +65,7 @@ const Explore = ({ onProductClick }) => {
                 <section className="explore-section">
                     <div className="section-header">
                         <h3 className="section-label">Toko Unggulan</h3>
-                        <span className="see-all">Lihat Semua</span>
+                        <span className="see-all" onClick={onSeeAllStores}>Lihat Semua</span>
                     </div>
                     <div className="store-discovery-row">
                         {featuredStores.map(store => (

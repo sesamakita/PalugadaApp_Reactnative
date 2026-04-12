@@ -12,6 +12,23 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
+const regionalMapping = {
+  'Palu': 'Palu',
+  'Donggala': 'Donggala',
+  'Parigi Moutong': 'Parimo',
+  'Sigi': 'Sigi',
+  'Poso': 'Poso',
+  'Tojo Una-Una': 'Touna',
+  'Banggai': 'Banggai',
+  'Banggai Kepulauan': 'Bangkep',
+  'Banggai Laut': 'Balut',
+  'Morowali Utara': 'Morut',
+  'Morowali': 'Morowali',
+  'Buol': 'Buol',
+  'Tolitoli': 'Toli-toli',
+  'Toli-Toli': 'Toli-toli'
+};
+
 // Component to handle map clicks and marker dragging
 const LocationMarker = ({ position, setPosition }) => {
     useMapEvents({
@@ -66,16 +83,39 @@ const AddressMap = ({ initialPosition, onConfirm, onClose }) => {
                 .then(res => res.json())
                 .then(data => {
                     if (data.address) {
-                        // Prioritas: Kabupaten (County), Kota (City/State District), atau Town
-                        const regency = data.address.county || 
-                                        data.address.state_district || 
-                                        data.address.city || 
-                                        data.address.municipality || 
-                                        data.address.town;
+                        const addressValues = Object.values(data.address).map(v => v.toString().toLowerCase());
                         
-                        // Tampilkan alamat lengkap tapi simpan referensi regency
-                        const fullAddr = data.display_name;
-                        setAddress(fullAddr);
+                        const searchKeywords = [
+                            { key: 'palu', brand: 'Palu' },
+                            { key: 'donggala', brand: 'Donggala' },
+                            { key: 'parigi moutong', brand: 'Parimo' },
+                            { key: 'sigi', brand: 'Sigi' },
+                            { key: 'poso', brand: 'Poso' },
+                            { key: 'tojo una-una', brand: 'Touna' },
+                            { key: 'banggai kepulauan', brand: 'Bangkep' },
+                            { key: 'banggai laut', brand: 'Balut' },
+                            { key: 'banggai', brand: 'Banggai' },
+                            { key: 'morowali utara', brand: 'Morut' },
+                            { key: 'morowali', brand: 'Morowali' },
+                            { key: 'buol', brand: 'Buol' },
+                            { key: 'tolitoli', brand: 'Toli-toli' },
+                            { key: 'toli-toli', brand: 'Toli-toli' }
+                        ];
+
+                        let foundBrandedName = null;
+                        for (const item of searchKeywords) {
+                            if (addressValues.some(val => val.includes(item.key))) {
+                                foundBrandedName = item.brand;
+                                break;
+                            }
+                        }
+
+                        if (foundBrandedName) {
+                            setAddress(foundBrandedName);
+                        } else {
+                            // Fallback to full address but cleaned for header display if needed
+                            setAddress(data.display_name);
+                        }
                     }
                     setLoading(false);
                 })

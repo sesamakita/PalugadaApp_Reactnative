@@ -8,6 +8,7 @@
     margin: 0 auto;
     position: relative;
     overflow-y: auto;
+    overflow-x: hidden; /* Prevent horizontal scroll from background patterns */
 }
 
 /* Background patterns for extra "Deep" feel */

@@ -1,6 +1,6 @@
 .auth-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #001a3f 0%, #003078 100%);
+    background: linear-gradient(135deg, #003078 0%, #0a8a77 100%);
     padding: 80px 24px 60px; /* Increased top padding to fix "mepet" issue */
     display: flex;
     flex-direction: column;
@@ -66,7 +66,7 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 100px rgba(10, 138, 119, 0.1);
     position: relative;
     z-index: 1;
 }
@@ -103,13 +103,13 @@
 }
 
 .input-group input:focus {
-    border-color: var(--secondary);
+    border-color: #80ffd4;
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 4px rgba(251, 176, 59, 0.1);
+    box-shadow: 0 0 0 4px rgba(10, 138, 119, 0.3);
 }
 
 .input-group input:focus + .input-icon {
-    color: var(--secondary);
+    color: #80ffd4;
 }
 
 .password-toggle {
@@ -205,10 +205,10 @@
 
 .auth-divider span {
     position: relative;
-    background: #002555; /* Match mid-gradient color */
+    background: #055c6b; /* Adjusted to match mid-teal gradient color */
     padding: 0 16px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.5);
     border-radius: 20px;
 }
 

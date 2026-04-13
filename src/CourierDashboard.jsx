@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ChevronLeft,
     CheckCircle,
@@ -23,6 +23,11 @@ import AppBar from './components/AppBar';
 
 const CourierDashboard = ({ onBack, onNavigate }) => {
     const [view, setView] = useState('main'); // main, taskDetail
+    
+    // Scroll to top when internal view changes
+    useEffect(() => {
+        document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
+    }, [view]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isOnline, setIsOnline] = useState(true);
     const [showPoD, setShowPoD] = useState(false);
@@ -76,7 +81,7 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
         setView('main');
     };
 
-    const DashboardMain = () => (
+    const renderDashboardMain = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px' }}>
             {/* Quick Access Buttons */}
             <div style={{
@@ -234,7 +239,7 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
         </div>
     );
 
-    const TaskDetailView = () => (
+    const renderTaskDetailView = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px' }}>
             <div className="detail-card card">
                 <div className="order-header">
@@ -356,11 +361,11 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
                 onBack={() => (view === 'taskDetail' ? setView('main') : onBack())}
             />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             <div className="dashboard-content">
-                {view === 'main' && <DashboardMain />}
-                {view === 'taskDetail' && <TaskDetailView />}
+                {view === 'main' && renderDashboardMain()}
+                {view === 'taskDetail' && renderTaskDetailView()}
             </div>
         </div>
     );

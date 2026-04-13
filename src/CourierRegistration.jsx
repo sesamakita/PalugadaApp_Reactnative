@@ -141,7 +141,7 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                 title="Daftar Jadi Mitra Kurir"
                 onBack={handleBack}
             />
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             {/* Progress Steps */}
             <div className="registration-progress">

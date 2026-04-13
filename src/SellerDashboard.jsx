@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ChevronLeft,
     Plus,
@@ -15,9 +15,15 @@ import {
 import './Dashboard.css';
 import AddressMap from './AddressMap';
 import AppBar from './components/AppBar';
+import storeCover from './assets/branding/store_cover.png';
 
 const SellerDashboard = ({ onBack, onNavigate }) => {
     const [activeTab, setActiveTab] = useState('main'); // main, addProduct, orderDetail
+    
+    // Scroll to top when internal view changes
+    useEffect(() => {
+        document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
+    }, [activeTab]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [productCategory, setProductCategory] = useState('Kuliner');
     const [showMapModal, setShowMapModal] = useState(false);
@@ -60,7 +66,7 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
 
     // --- Sub-Views ---
 
-    const MainView = () => (
+    const renderMainView = () => (
         <div className="scroll-content">
             <div className="stats-grid">
                 {stats.map((stat, i) => (
@@ -133,7 +139,7 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
         </div>
     );
 
-    const AddProductView = () => (
+    const renderAddProductView = () => (
         <div className="scroll-content">
             <div className="form-card card">
                 <h3>Tambah Produk Baru</h3>
@@ -216,7 +222,7 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
         </div>
     );
 
-    const OrderDetailView = () => (
+    const renderOrderDetailView = () => (
         <div className="scroll-content">
             <div className="detail-card card">
                 <div className="order-header">
@@ -261,15 +267,31 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
         </div>
     );
 
-    const StoreProfileView = () => (
-        <div className="scroll-content">
-            <div className="form-card card">
-                <div className="profile-header-edit">
+    const renderStoreProfileView = () => (
+        <div className="scroll-content" style={{ padding: 0 }}>
+            <div className="profile-header-premium">
+                <div className="store-cover-container">
+                    <img src={storeCover} alt="Store Cover" className="store-cover-img" />
+                    <div className="cover-overlay"></div>
+                    <div className="cover-edit-badge">
+                        <Camera size={18} />
+                    </div>
+                </div>
+                
+                <div className="avatar-overlap-wrapper">
                     <div className="profile-avatar-large">
                         <Store size={40} color="var(--primary)" />
-                        <div className="edit-badge"><Camera size={14} /></div>
+                        <div className="edit-badge">
+                            <Camera size={14} />
+                        </div>
                     </div>
-                    <h3>Profil Toko</h3>
+                </div>
+            </div>
+
+            <div className="form-card card" style={{ marginTop: '40px', background: 'transparent', boxShadow: 'none' }}>
+                <div style={{ marginBottom: '8px' }}>
+                    <h3 style={{ margin: 0, fontSize: '20px' }}>Pengaturan Profil</h3>
+                    <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0' }}>Kelola informasi identitas toko Anda</p>
                 </div>
 
                 <div className="form-group">
@@ -333,12 +355,12 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
                 onBack={() => activeTab === 'main' ? onBack() : setActiveTab('main')}
             />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
-            {activeTab === 'main' && <MainView />}
-            {activeTab === 'addProduct' && <AddProductView />}
-            {activeTab === 'orderDetail' && <OrderDetailView />}
-            {activeTab === 'profile' && <StoreProfileView />}
+            {activeTab === 'main' && renderMainView()}
+            {activeTab === 'addProduct' && renderAddProductView()}
+            {activeTab === 'orderDetail' && renderOrderDetailView()}
+            {activeTab === 'profile' && renderStoreProfileView()}
 
             {showMapModal && (
                 <AddressMap

@@ -99,8 +99,12 @@ function App() {
     };
     initStatusBar();
 
+    // Scroll to top when view changes
+    window.scrollTo(0, 0);
+    document.querySelectorAll('.scroll-content, .dashboard-content').forEach(el => el.scrollTop = 0);
+
     localStorage.setItem('user_favorites', JSON.stringify(favorites));
-  }, [favorites]);
+  }, [favorites, view]);
 
   const handleToggleFavorite = (product) => {
     setFavorites(prev => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ChevronLeft,
     Wallet as WalletIcon,
@@ -25,6 +25,11 @@ const Wallet = ({ onBack, userRole = 'buyer' }) => {
     // userRole: 'buyer' | 'seller' | 'courier' | 'multi'
     const [view, setView] = useState('main'); // main, topup, withdraw, history
     const [selectedPeriod, setSelectedPeriod] = useState('week'); // week, month
+    
+    // Scroll to top when internal view changes
+    useEffect(() => {
+        document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
+    }, [view]);
 
     // Mock data based on role
     const walletData = {
@@ -84,7 +89,7 @@ const Wallet = ({ onBack, userRole = 'buyer' }) => {
 
     const theme = getTheme();
 
-    const MainWalletView = () => (
+    const renderMainWalletView = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px', paddingLeft: '20px', paddingRight: '20px' }}>
             {/* 1. ADAPTIVE HEADER */}
             <div className="wallet-balance-card card" style={{
@@ -233,18 +238,18 @@ const Wallet = ({ onBack, userRole = 'buyer' }) => {
         <div className="dashboard-container">
             <AppBar
                 title={
-                    view === 'main' ? (userRole === 'seller' ? 'Keuangan Toko' : userRole === 'courier' ? 'Dompet Kurir' : 'Dompet Digital') :
+                    view === 'main' ? (userRole === 'seller' ? 'Keuangan Toko' : userRole === 'courier' ? 'Dompet Tunai' : 'Dompet Digital') :
                         view === 'topup' ? 'Isi Saldo' :
                             view === 'withdraw' ? 'Tarik Saldo' :
                                 'Riwayat Transaksi'
                 }
                 onBack={() => view === 'main' ? onBack() : setView('main')}
             />
-            {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            {/* Added spacer for fixed AppBar — includes safe-top for status bar */}
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             <div className="dashboard-content">
-                {view === 'main' && <MainWalletView />}
+                {view === 'main' && renderMainWalletView()}
                 {view === 'topup' && <WalletTopup onBack={() => setView('main')} onSuccess={() => setView('main')} theme={theme} />}
                 {view === 'withdraw' && <WalletWithdraw onBack={() => setView('main')} onSuccess={() => setView('main')} currentBalance={walletData.mainBalance} theme={theme} />}
                 {view === 'history' && <WalletHistory onBack={() => setView('main')} filter={userRole} theme={theme} />}

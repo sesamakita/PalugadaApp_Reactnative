@@ -38,7 +38,7 @@ const WalletWithdraw = ({ onBack, onSuccess, currentBalance = 350000, theme }) =
         return null;
     };
 
-    const StepAmount = () => (
+    const renderStepAmount = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Jumlah Penarikan</h3>
 
@@ -110,7 +110,7 @@ const WalletWithdraw = ({ onBack, onSuccess, currentBalance = 350000, theme }) =
         </div>
     );
 
-    const StepBank = () => (
+    const renderStepBank = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Pilih Rekening Tujuan</h3>
 
@@ -165,7 +165,7 @@ const WalletWithdraw = ({ onBack, onSuccess, currentBalance = 350000, theme }) =
         </div>
     );
 
-    const StepConfirmation = () => (
+    const renderStepConfirmation = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Konfirmasi Penarikan</h3>
 
@@ -236,9 +236,9 @@ const WalletWithdraw = ({ onBack, onSuccess, currentBalance = 350000, theme }) =
 
     return (
         <div>
-            {step === 1 && <StepAmount />}
-            {step === 2 && <StepBank />}
-            {step === 3 && <StepConfirmation />}
+            {step === 1 && renderStepAmount()}
+            {step === 2 && renderStepBank()}
+            {step === 3 && renderStepConfirmation()}
         </div>
     );
 };

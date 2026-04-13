@@ -24,7 +24,7 @@ const Checkout = ({ cartItems, onBack, onConfirm }) => {
         <div className="checkout-container">
             <AppBar title="Checkout" onBack={onBack} />
             {/* Added spacer for fixed AppBar */}
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             <div className="scroll-content">
                 <div className="checkout-section card">

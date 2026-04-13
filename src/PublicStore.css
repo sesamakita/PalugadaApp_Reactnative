@@ -4,50 +4,6 @@
     min-height: 100vh;
     background: #f8fafc;
     width: 100%;
-    overflow-x: hidden;
-    padding-top: 64px;
-    /* Header height */
-}
-
-.pg-store-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    max-width: 450px;
-    z-index: 1000;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.pg-back-btn {
-    background: none;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    color: var(--text-main);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.pg-nav-title {
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.pg-nav-actions {
-    width: 40px;
-    display: flex;
-    justify-content: flex-end;
-    color: var(--text-muted);
 }
 
 .pg-store-hero {
@@ -56,17 +12,33 @@
 }
 
 .pg-store-banner {
-    height: 120px;
+    width: 100%;
+    aspect-ratio: 21 / 9;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    opacity: 0.9;
+    position: relative;
+    overflow: hidden;
+}
+
+.pg-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pg-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3));
 }
 
 .pg-store-profile {
     display: flex;
     padding: 0 20px 20px;
-    margin-top: -50px;
+    margin-top: -40px; /* Pull up for overlap */
     gap: 16px;
     align-items: flex-end;
+    position: relative;
+    z-index: 10;
 }
 
 .pg-avatar-box {
@@ -89,12 +61,16 @@
 
 .pg-store-info {
     margin-bottom: 5px;
+    flex: 1;
+    /* FIX: Push text down away from banner edge */
+    transform: translateY(16px);
 }
 
 .pg-store-name {
     font-size: 20px;
     font-weight: 800;
     margin-bottom: 4px;
+    color: var(--text-main);
 }
 
 .pg-store-loc {
@@ -153,7 +129,6 @@
     border-radius: var(--radius-sm);
     font-weight: 700;
     font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0, 48, 120, 0.2);
 }
 
 .pg-btn-chat {
@@ -205,14 +180,12 @@
     width: 100%;
     height: 3px;
     background: var(--primary);
-    border-radius: 10px 10px 0 0;
 }
 
 .pg-product-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    padding-bottom: 24px;
 }
 
 .pg-prod-card {
@@ -220,19 +193,13 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    min-width: 0;
 }
 
 .pg-prod-img {
-    aspect-ratio: 0.9;
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
+    aspect-ratio: 1;
     background: #f1f5f9;
+    position: relative;
+    overflow: hidden;
 }
 
 .pg-prod-img img {
@@ -241,45 +208,18 @@
     object-fit: cover;
 }
 
-.pg-prod-fav {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ef4444;
-    box-shadow: var(--shadow-sm);
-}
-
 .pg-prod-meta {
-    padding: 10px 4px;
+    padding: 10px;
 }
 
 .pg-prod-meta h3 {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .pg-prod-price {
     font-weight: 800;
     color: var(--primary);
     font-size: 15px;
-    margin-bottom: 6px;
-}
-
-.pg-prod-foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: var(--text-muted);
 }

@@ -36,7 +36,7 @@ const WalletTopup = ({ onBack, onSuccess, theme }) => {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const StepAmount = () => (
+    const renderStepAmount = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Jumlah Top Up</h3>
 
@@ -96,7 +96,7 @@ const WalletTopup = ({ onBack, onSuccess, theme }) => {
         </div>
     );
 
-    const StepMethod = () => (
+    const renderStepMethod = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Pilih Metode Pembayaran</h3>
 
@@ -151,7 +151,7 @@ const WalletTopup = ({ onBack, onSuccess, theme }) => {
         </div>
     );
 
-    const StepConfirmation = () => (
+    const renderStepConfirmation = () => (
         <div style={{ padding: '16px' }}>
             <h3 style={{ marginBottom: '16px' }}>Konfirmasi Top Up</h3>
 
@@ -221,9 +221,9 @@ const WalletTopup = ({ onBack, onSuccess, theme }) => {
 
     return (
         <div>
-            {step === 1 && <StepAmount />}
-            {step === 2 && <StepMethod />}
-            {step === 3 && <StepConfirmation />}
+            {step === 1 && renderStepAmount()}
+            {step === 2 && renderStepMethod()}
+            {step === 3 && renderStepConfirmation()}
         </div>
     );
 };

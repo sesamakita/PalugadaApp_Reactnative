@@ -123,7 +123,7 @@ const CourierCommunity = ({ onBack }) => {
     return (
         <div className="courier-community-container">
             <AppBar title="Komunitas Kurir" onBack={onBack} />
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             {/* Tabs */}
             <div className="community-tabs">

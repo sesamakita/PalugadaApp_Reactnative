@@ -91,7 +91,7 @@ const CourierProfile = ({ onBack }) => {
     return (
         <div className="courier-profile-container">
             <AppBar title="Profile Kurir" onBack={onBack} />
-            <div style={{ height: '64px' }}></div>
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             <div className="scroll-content" style={{ paddingBottom: '40px' }}>
 

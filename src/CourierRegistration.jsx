@@ -142,6 +142,16 @@ const CourierRegistration = ({ onBack, onComplete }) => {
                 onBack={handleBack}
             />
             <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
+            
+            {/* Developer Bypass Button */}
+            <div style={{ padding: '0 16px 16px', display: 'flex', justifyContent: 'flex-end' }}>
+                <button 
+                    onClick={() => onComplete()}
+                    style={{ background: 'transparent', border: '1px dashed #cbd5e1', padding: '6px 12px', fontSize: '12px', color: 'var(--text-muted)', borderRadius: '6px' }}
+                >
+                    [MODE UJICOBA] Lewati
+                </button>
+            </div>
 
             {/* Progress Steps */}
             <div className="registration-progress">

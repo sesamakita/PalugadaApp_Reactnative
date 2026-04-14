@@ -14,24 +14,43 @@ import {
     X,
     Check,
     User,
-    Users
+    Users,
+    ChevronRight,
+    MapPin,
+    Search,
+    RefreshCw,
+    Play,
+    Pause,
+    Award
 } from 'lucide-react';
 import './Dashboard.css';
 import CourierHistory from './CourierHistory';
 import CourierEarnings from './CourierEarnings';
 import AppBar from './components/AppBar';
 
-const CourierDashboard = ({ onBack, onNavigate }) => {
-    const [view, setView] = useState('main'); // main, taskDetail
-    
-    // Scroll to top when internal view changes
-    useEffect(() => {
-        document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
-    }, [view]);
+const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
+    // view: home, tasks, map, taskDetail
+    const [view, setView] = useState('home');
+    const [taskTab, setTaskTab] = useState('aktif'); // aktif, tersedia
     const [selectedTask, setSelectedTask] = useState(null);
     const [isOnline, setIsOnline] = useState(true);
     const [showPoD, setShowPoD] = useState(false);
     const [podCaptured, setPodCaptured] = useState(false);
+
+    // Sync external view with internal sub-views
+    useEffect(() => {
+        if (activeView === 'home' || activeView === 'courier') setView('home');
+        if (activeView === 'available-orders') {
+            setView('tasks');
+            setTaskTab('tersedia');
+        }
+        if (activeView === 'courier-map') setView('map');
+    }, [activeView]);
+
+    // Scroll to top when view changes
+    useEffect(() => {
+        document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
+    }, [view, taskTab]);
 
     const platformFeePercent = 0.02;
 
@@ -41,21 +60,24 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
     const grossDailyIncome = 65000;
     const netDailyIncome = grossDailyIncome - Math.round(grossDailyIncome * platformFeePercent);
 
-    const stats = [
-        { label: 'Pesanan Aktif', value: '2', color: '#0ead98' },
-        { label: 'Pendapatan Bersih Hari Ini', value: `Rp ${netDailyIncome.toLocaleString('id-ID')}`, color: '#fbb03b' },
-    ];
-
     const courierInfo = {
         name: 'Deni Indrayana',
         serviceType: 'local', // local, trans
-        fleet: 'Motorcycle'
+        fleet: 'Motorcycle',
+        rating: 4.9,
+        totalDeliveries: 128
     };
 
     const tasks = [
-        { id: '#T-992', shop: 'Toko Batik Jaya', customer: 'Andi Pratama', status: 'Siap Pickup', type: 'local', income: 'Rp 15.000', shopAddr: 'Pasar Baru Blok A', custAddr: 'Jl. Ahmad Yani No. 10', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2504, lng: 112.7688 },
-        { id: '#T-991', shop: 'Warung Bu Siti', customer: 'Maya Sari', status: 'Dalam Antar', type: 'local', income: 'Rp 12.000', shopAddr: 'Jl. Mawar No. 4', custAddr: 'Jl. Sudirman Gg. 5', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2575, lng: 112.7521 },
-        { id: '#T-985', shop: 'Gudang Logistik Palu', customer: 'Toko Berkah Poso', status: 'Siap Pickup', type: 'trans', income: 'Rp 245.000', shopAddr: 'Kawasan Pergudangan Palu', custAddr: 'Jl. Trans Sulawesi, Poso', shopPhone: '628123456789', custPhone: '628987654321', lat: -1.4265, lng: 120.6588 },
+        { id: '#T-992', shop: 'Toko Batik Jaya', customer: 'Andi Pratama', status: 'Siap Pickup', type: 'local', income: 'Rp 15.000', shopAddr: 'Pasar Baru Blok A', custAddr: 'Jl. Ahmad Yani No. 10', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2504, lng: 112.7688, distance: '1.2 km' },
+        { id: '#T-991', shop: 'Warung Bu Siti', customer: 'Maya Sari', status: 'Dalam Antar', type: 'local', income: 'Rp 12.000', shopAddr: 'Jl. Mawar No. 4', custAddr: 'Jl. Sudirman Gg. 5', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2575, lng: 112.7521, distance: '2.5 km' },
+        { id: '#T-985', shop: 'Gudang Logistik Palu', customer: 'Toko Berkah Poso', status: 'Siap Pickup', type: 'trans', income: 'Rp 245.000', shopAddr: 'Kawasan Pergudangan Palu', custAddr: 'Jl. Trans Sulawesi, Poso', shopPhone: '628123456789', custPhone: '628987654321', lat: -1.4265, lng: 120.6588, distance: '35 km' },
+    ];
+
+    const marketTasks = [
+        { id: '#T-999', shop: 'Nasi Kuning Ambon', customer: 'Budi Hartono', type: 'local', income: 'Rp 18.000', distance: '0.8 km', eta: '5 menit' },
+        { id: '#T-998', shop: 'Apotek Segar', customer: 'Rina Melati', type: 'local', income: 'Rp 10.000', distance: '1.5 km', eta: '8 menit' },
+        { id: '#T-997', shop: 'Mega Logistik', customer: 'Toko Maju Parigi', type: 'trans', income: 'Rp 180.000', distance: '12 km', eta: '25 menit' },
     ];
 
     const handleTaskClick = (task) => {
@@ -71,257 +93,292 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
         if (selectedTask.status === 'Dalam Antar') {
             setShowPoD(true);
         } else {
-            setView('main');
+            setView('tasks');
         }
     };
 
     const handleConfirmPoD = () => {
         setShowPoD(false);
         setPodCaptured(false);
-        setView('main');
+        setView('tasks');
     };
 
-    const renderDashboardMain = () => (
+    // --- Sub-View Renderers ---
+
+    const renderHome = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px' }}>
-            {/* Quick Access Buttons */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '12px',
-                marginBottom: '16px'
-            }}>
-                <button
-                    className="btn-secondary"
-                    onClick={() => onNavigate && onNavigate('courier-profile')}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '12px'
-                    }}
-                >
-                    <User size={18} />
-                    Profile Saya
-                </button>
-                <button
-                    className="btn-secondary"
-                    onClick={() => onNavigate && onNavigate('courier-community')}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '12px'
-                    }}
-                >
-                    <Users size={18} />
-                    Komunitas
-                </button>
-            </div>
-
-            {/* Demo: Courier Registration */}
-            <div style={{ marginBottom: '16px' }}>
-                <button
-                    className="btn-primary"
-                    onClick={() => onNavigate && onNavigate('courier-registration')}
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '12px'
-                    }}
-                >
-                    <User size={18} />
-                    🎯 Demo: Form Registrasi Kurir (5 Steps)
-                </button>
-            </div>
-
-            {/* Status Toggle - Correct Placement Above Stats */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <div className={`service-badge ${courierInfo.serviceType}`}>
-                    {courierInfo.serviceType === 'local' ? '📦 Palugada Lokal' : '🚛 Palugada Trans-Sulteng'}
+            {/* Header Premium */}
+            <div className="courier-hero-header">
+                <div className="courier-profile-row">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div className="courier-avatar-wrapper">
+                            <div className="courier-avatar-glow">
+                                {courierInfo.name.charAt(0)}
+                            </div>
+                            <div className={`online-pulse-dot ${isOnline ? 'online' : 'offline'}`} 
+                                 style={{ background: isOnline ? '#10b981' : '#94a3b8' }}>
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '18px', fontWeight: '800' }}>{courierInfo.name}</div>
+                            <div style={{ fontSize: '12px', opacity: 0.7, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <Award size={12} color="var(--courier-primary)" />
+                                Level Gold • {courierInfo.rating} Rating
+                            </div>
+                        </div>
+                    </div>
+                    <div className={`courier-status-chip ${isOnline ? 'online' : 'offline'}`} onClick={() => setIsOnline(!isOnline)}>
+                        <span className="dot"></span>
+                        {isOnline ? 'Online' : 'Offline'}
+                    </div>
                 </div>
-            </div>
-            
-            <div className={`availability-bar top ${isOnline ? 'online' : 'offline'}`} onClick={() => setIsOnline(!isOnline)}>
-                <div className="status-text">
-                    <div className={`status-dot ${isOnline ? 'online' : 'offline'}`}></div>
-                    <span>Status Kurir: <strong>{isOnline ? 'Aktif (Online)' : 'Istirahat (Offline)'}</strong></span>
-                </div>
-                <div className={`toggle-switch ${isOnline ? 'active' : ''}`}>
-                    <div className="toggle-handle"></div>
+
+                <div className="courier-main-stats">
+                    <div className="stat-item-premium">
+                        <span className="label">Pendapatan Hari Ini</span>
+                        <span className="value">Rp {netDailyIncome.toLocaleString('id-ID')}</span>
+                    </div>
+                    <div className="stat-item-premium">
+                        <span className="label">Tugas Selesai</span>
+                        <span className="value">{courierInfo.totalDeliveries}</span>
+                    </div>
                 </div>
             </div>
 
-            {/* Quick Stats - Active Orders & Daily Income */}
-            {/* Quick Stats - Active Orders & Daily Income */}
-            <div className="stats-grid" style={{ gridTemplateColumns: '1fr 1fr', marginBottom: '24px', alignItems: 'start' }}>
-                <div className="stat-card card">
-                    <span className="stat-label">Pesanan Aktif</span>
-                    <span className="stat-value" style={{ color: '#0ead98' }}>2</span>
+            {/* Quick Actions */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '24px', marginTop: '-10px' }}>
+                <div className="glass-card" style={{ padding: '12px', textAlign: 'center' }} onClick={() => onNavigate('wallet')}>
+                    <DollarSign size={20} color="var(--courier-primary)" style={{ marginBottom: '4px' }} />
+                    <div style={{ fontSize: '10px', fontWeight: '700' }}>Dompet</div>
                 </div>
-                <div className="stat-card card">
-                    <span className="stat-label">Pendapatan Bersih Hari Ini</span>
-                    <span className="stat-value" style={{ color: '#fbb03b' }}>Rp {netDailyIncome.toLocaleString('id-ID')}</span>
+                <div className="glass-card" style={{ padding: '12px', textAlign: 'center' }} onClick={() => setView('tasks')}>
+                    <Clock size={20} color="var(--courier-primary)" style={{ marginBottom: '4px' }} />
+                    <div style={{ fontSize: '10px', fontWeight: '700' }}>Jadwal</div>
+                </div>
+                <div className="glass-card" style={{ padding: '12px', textAlign: 'center' }} onClick={() => onNavigate('courier-community')}>
+                    <Users size={20} color="var(--courier-primary)" style={{ marginBottom: '4px' }} />
+                    <div style={{ fontSize: '10px', fontWeight: '700' }}>Warga</div>
                 </div>
             </div>
 
-            <button
-                className="btn-primary"
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    padding: '12px',
-                    marginBottom: '24px',
-                    borderRadius: 'var(--radius-sm)',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                }}
-                onClick={() => onNavigate && onNavigate('wallet')}
-            >
-                <DollarSign size={18} /> Tarik Saldo
-            </button>
-
-            {/* Active Tasks Section */}
+            {/* Performance Summary */}
             <div className="dashboard-section">
                 <div className="section-header-row">
-                    <h3>Tugas Sedang Berjalan</h3>
+                    <h3>Performa Kurir</h3>
+                    <ChevronRight size={18} opacity={0.5} />
+                </div>
+                <div className="glass-card" style={{ padding: '16px' }}>
+                    <CourierEarnings isSimplified={true} />
+                </div>
+            </div>
+
+            {/* Active Task Preview */}
+            <div className="dashboard-section">
+                <div className="section-header-row">
+                    <h3>Tugas Berjalan ({tasks.length})</h3>
+                    <button className="view-all-link" onClick={() => setView('tasks')}>Lihat Semua</button>
                 </div>
                 <div className="orders-list">
-                    {tasks.map((task, j) => (
-                        <div key={j} className="order-card card" onClick={() => handleTaskClick(task)}>
+                    {tasks.slice(0, 2).map((task, j) => (
+                        <div key={j} className="order-card glass-card" style={{ padding: '16px' }} onClick={() => handleTaskClick(task)}>
                             <div className="order-header">
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span className="order-id">{task.id}</span>
-                                    <span className={`task-type-tag ${task.type}`}>
-                                        {task.type === 'local' ? '📍 Lokal' : '🚛 Trans'}
-                                    </span>
-                                </div>
+                                <span className="order-id" style={{ color: 'var(--courier-secondary)' }}>{task.id}</span>
                                 <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>{task.status}</span>
                             </div>
-                            <div className="order-body">
-                                <div className="order-info">
-                                    <div className="order-buyer">Dari: {task.shop}</div>
-                                    <div className="order-product">Ke: {task.customer}</div>
-                                </div>
-                                <div className="order-price" style={{ color: '#0ead98' }}>{task.income}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                                <div style={{ fontSize: '14px', fontWeight: '700' }}>Ke: {task.customer}</div>
+                                <div style={{ fontSize: '13px', color: '#0ead98', fontWeight: '800' }}>{task.income}</div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
+        </div>
+    );
 
-            {/* Integrated Performance Section */}
-            <div className="dashboard-section">
-                <div className="section-header-row">
-                    <h3>Ringkasan Performa</h3>
-                    <button className="view-all-link" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        Tuju Performa <ChevronLeft size={14} style={{ transform: 'rotate(180deg)' }} />
-                    </button>
+    const renderTasks = () => (
+        <div className="scroll-content">
+            <div className="task-tabs glass-card">
+                <div className={`task-tab ${taskTab === 'aktif' ? 'active' : ''}`} onClick={() => setTaskTab('aktif')}>
+                    Berjalan ({tasks.length})
                 </div>
-                <CourierEarnings isSimplified={true} />
+                <div className={`task-tab ${taskTab === 'tersedia' ? 'active' : ''}`} onClick={() => setTaskTab('tersedia')}>
+                    Tersedia ({marketTasks.length})
+                </div>
             </div>
 
-            {/* Recent History Section */}
-            <div className="dashboard-section">
-                <div className="section-header-row">
-                    <h3>Riwayat Terakhir</h3>
-                    <button className="view-all-link">Lihat Semua</button>
+            {taskTab === 'aktif' ? (
+                <div className="orders-list">
+                    {tasks.map((task, j) => (
+                        <div key={j} className="order-card glass-card" style={{ padding: '16px' }} onClick={() => handleTaskClick(task)}>
+                            <div className="order-header">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span className="order-id" style={{ color: 'var(--courier-secondary)' }}>{task.id}</span>
+                                    <span className={`task-type-tag ${task.type}`}>{task.type === 'local' ? '📦 Lokal' : '🚛 Trans'}</span>
+                                </div>
+                                <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>{task.status}</span>
+                            </div>
+                            <div className="order-body" style={{ marginTop: '12px' }}>
+                                <div className="route-preview">
+                                    <div style={{ borderLeft: '2px dashed #ddd', paddingLeft: '12px', position: 'relative' }}>
+                                        <div style={{ position: 'absolute', left: '-5px', top: '0', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)' }}></div>
+                                        <div style={{ fontSize: '12px', color: '#64748b' }}>Pickup: {task.shop}</div>
+                                        <div style={{ margin: '8px 0' }}></div>
+                                        <div style={{ position: 'absolute', left: '-5px', bottom: '0', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
+                                        <div style={{ fontSize: '13px', fontWeight: '700' }}>Antar: {task.customer}</div>
+                                    </div>
+                                </div>
+                                <div className="order-price" style={{ color: 'var(--courier-secondary)' }}>{task.income}</div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                <CourierHistory isSimplified={true} />
-            </div>
+            ) : (
+                <div className="orders-list">
+                    <div style={{ marginBottom: '12px', display: 'flex', gap: '8px' }}>
+                        <div className="glass-card" style={{ flex: 1, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Search size={16} opacity={0.5} />
+                            <input type="text" placeholder="Cari wilayah..." style={{ border: 'none', background: 'transparent', width: '100%', outline: 'none', fontSize: '13px' }} />
+                        </div>
+                        <button className="glass-card" style={{ padding: '8px', border: 'none' }}><MapPin size={18} color="var(--courier-primary)" /></button>
+                    </div>
+                    {marketTasks.map((task, j) => (
+                        <div key={j} className="market-card glass-card">
+                            <div className="market-card-header">
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <span style={{ fontWeight: '800', fontSize: '14px' }}>{task.income}</span>
+                                    <span className="distance-badge">{task.distance}</span>
+                                </div>
+                                <span className={`task-type-tag ${task.type}`}>{task.type === 'local' ? 'Lokal' : 'Trans'}</span>
+                            </div>
+                            <div style={{ fontSize: '13px', fontWeight: '600', marginBottom: '12px' }}>{task.shop} → {task.customer}</div>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button className="btn-primary" style={{ flex: 2, padding: '8px', borderRadius: '8px', fontSize: '12px' }} onClick={() => handleTaskClick({...task, status: 'Tersedia'})}>Detail</button>
+                                <button className="btn-secondary" style={{ flex: 3, padding: '8px', borderRadius: '8px', fontSize: '12px', background: 'var(--courier-primary)', color: 'white', border: 'none' }}>Ambil Tugas</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 
+    const renderMap = () => (
+        <div className="scroll-content" style={{ padding: '0' }}>
+            <div className="full-map-container" style={{ borderRadius: '0' }}>
+                <img 
+                    src="https://api.maptiler.com/maps/basic-v2/static/-120,0,10/800x600.png?key=get_your_own_key" 
+                    className="map-placeholder-img" 
+                    alt="Map" 
+                />
+                
+                {/* Simulated Marker: Courier */}
+                <div className="courier-marker" style={{ top: '50%', left: '50%' }}>
+                    <div className="marker-pin"></div>
+                    <div style={{ 
+                        position: 'absolute', 
+                        width: '60px', 
+                        height: '60px', 
+                        borderRadius: '50%', 
+                        background: 'rgba(245, 158, 11, 0.2)', 
+                        top: '-10px', 
+                        left: '-10px',
+                        animation: 'pulse-ring 2s infinite'
+                    }}></div>
+                </div>
+
+                {/* Simulated Markers: Orders */}
+                <div className="hotspot-glow" style={{ top: '30%', left: '40%' }}></div>
+                <div className="hotspot-glow" style={{ top: '60%', left: '70%' }}></div>
+
+                <div className="map-overlay-tools">
+                    <button className="map-tool-btn"><RefreshCw size={20} /></button>
+                    <button className="map-tool-btn"><MapPin size={20} color="var(--courier-primary)" /></button>
+                </div>
+
+                <div className="map-bottom-panel">
+                    <div className="glass-card fadeIn" style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                            <div style={{ fontSize: '14px', fontWeight: '800' }}>Ditemukan 12 Tugas</div>
+                            <div style={{ fontSize: '11px', color: '#64748b' }}>Terdekat: Pasar Inpres Palu (0.5km)</div>
+                        </div>
+                        <button 
+                            className="btn-primary" 
+                            style={{ padding: '8px 16px', borderRadius: '8px' }}
+                            onClick={() => { setView('tasks'); setTaskTab('tersedia'); }}
+                        >
+                            Lihat Daftar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 
     const renderTaskDetailView = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px' }}>
-            <div className="detail-card card">
+            <div className="detail-card glass-card">
                 <div className="order-header">
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <h3 style={{ fontSize: '16px', margin: 0 }}>Detail Tugas {selectedTask.id}</h3>
-                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>ID Transaksi: PAL-0099238</span>
+                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>ID: PAL-{(Math.random()*10000).toFixed(0)}</span>
                     </div>
                     <span className={`status-badge ${selectedTask.status.toLowerCase().replace(' ', '-')}`}>{selectedTask.status}</span>
                 </div>
 
-                <div className="route-box">
+                <div className="route-box" style={{ background: 'rgba(0,0,0,0.02)', padding: '16px', borderRadius: '12px', margin: '16px 0' }}>
                     <div className="route-step">
-                        <div className="step-point shop">
-                            <Store size={16} color="var(--primary)" />
-                        </div>
+                        <div className="step-point shop"><Store size={14} color="var(--primary)" /></div>
                         <div className="step-info">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <label>Pickup: {selectedTask.shop}</label>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <a href={`tel:${selectedTask.shopPhone}`} className="contact-icon"><Phone size={14} /></a>
-                                    <a href={`https://wa.me/${selectedTask.shopPhone}`} className="contact-icon wa"><MessageCircle size={14} /></a>
-                                </div>
+                            <label>Pickup: {selectedTask.shop}</label>
+                            <p style={{ fontSize: '12px' }}>{selectedTask.shopAddr || 'Pasar Kota'}</p>
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                                <a href="tel:0" className="contact-icon wa" style={{ width: '24px', height: '24px' }}><Phone size={12} /></a>
                             </div>
-                            <p>{selectedTask.shopAddr}</p>
                         </div>
                     </div>
-                    <div className="route-line"></div>
+                    <div className="route-line" style={{ height: '20px' }}></div>
                     <div className="route-step">
-                        <div className="step-point customer">
-                            <Home size={16} color="var(--secondary)" />
-                        </div>
+                        <div className="step-point customer"><Home size={14} color="#10b981" /></div>
                         <div className="step-info">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <label>Antar: {selectedTask.customer}</label>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <a href={`tel:${selectedTask.custPhone}`} className="contact-icon"><Phone size={14} /></a>
-                                    <a href={`https://wa.me/${selectedTask.custPhone}`} className="contact-icon wa"><MessageCircle size={14} /></a>
-                                </div>
-                            </div>
-                            <p>{selectedTask.custAddr}</p>
+                            <label>Antar: {selectedTask.customer}</label>
+                            <p style={{ fontSize: '12px' }}>{selectedTask.custAddr || 'Jl. Mawar'}</p>
                         </div>
-                    </div>
-                </div>
-
-                <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', margin: '12px 0', paddingTop: '12px' }}>
-                    <div className="detail-info-row">
-                        <label>Ongkos Kirim:</label>
-                        <span>{selectedTask.income}</span>
-                    </div>
-                    <div className="detail-info-row" style={{ color: '#ef4444' }}>
-                        <label style={{ color: '#ef4444' }}>Potongan Platform (2%):</label>
-                        <span>- Rp {Math.round(parseIncome(selectedTask.income) * platformFeePercent).toLocaleString('id-ID')}</span>
-                    </div>
-                    <div className="detail-info-row" style={{ fontWeight: '800', marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
-                        <label style={{ fontWeight: '800' }}>Pendapatan Bersih:</label>
-                        <span className="price-text">Rp {(parseIncome(selectedTask.income) - Math.round(parseIncome(selectedTask.income) * platformFeePercent)).toLocaleString('id-ID')}</span>
                     </div>
                 </div>
 
                 <div className="action-footer" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <button
-                        className="btn-secondary full-width"
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                        onClick={() => handleOpenMap(selectedTask.lat, selectedTask.lng)}
-                    >
-                        <Navigation size={18} /> Buka di Google Maps
+                    <button className="btn-secondary full-width glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '1px solid #ddd' }} onClick={() => handleOpenMap(-7, 112)}>
+                        <Navigation size={18} /> Navigasi Maps
                     </button>
-                    <button
-                        className="btn-primary full-width"
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                        onClick={handleCompleteTask}
-                    >
+                    <button className="btn-primary full-width" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'var(--courier-primary)' }} onClick={handleCompleteTask}>
                         <CheckCircle size={18} />
-                        {selectedTask.status === 'Siap Pickup' ? 'Barang Sudah Diambil' : 'Selesaikan Pengiriman'}
+                        {selectedTask.status === 'Siap Pickup' ? 'Ambil Barang' : selectedTask.status === 'Dalam Antar' ? 'Selesaikan' : 'Ambil Tugas'}
                     </button>
                 </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="dashboard-container">
+            <AppBar
+                title={view === 'home' ? 'Panel Kurir' : view === 'tasks' ? 'Daftar Tugas' : view === 'map' ? 'Peta Navigasi' : 'Detail'}
+                onBack={(view === 'home' || view === 'tasks' || view === 'map') ? null : () => (view !== 'home' ? setView('home') : onBack())}
+            />
+            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
+
+            <div className="dashboard-content">
+                {view === 'home' && renderHome()}
+                {view === 'tasks' && renderTasks()}
+                {view === 'map' && renderMap()}
+                {view === 'taskDetail' && renderTaskDetailView()}
             </div>
 
             {showPoD && (
                 <div className="map-modal-overlay">
-                    <div className="map-modal-container" style={{ maxHeight: '500px' }}>
-                        <div className="map-modal-header">
+                    <div className="map-modal-container glass-card" style={{ maxHeight: '500px' }}>
+                        <div className="map-modal-header" style={{ padding: '16px', borderBottom: '1px solid #eee' }}>
                             <h3>Bukti Pengiriman</h3>
                             <button className="close-btn" onClick={() => setShowPoD(false)}><X size={20} /></button>
                         </div>
@@ -335,38 +392,17 @@ const CourierDashboard = ({ onBack, onNavigate }) => {
                                 ) : (
                                     <div className="camera-placeholder">
                                         <Camera size={48} color="#94a3b8" />
-                                        <p>Ketuk untuk mengambil foto bukti</p>
+                                        <p>Ketuk untuk ambil foto</p>
                                     </div>
                                 )}
                             </div>
-                            <button
-                                className="btn-primary full-width"
-                                disabled={!podCaptured}
-                                onClick={handleConfirmPoD}
-                                style={{ opacity: podCaptured ? 1 : 0.5 }}
-                            >
-                                Konfirmasi & Kirim
+                            <button className="btn-primary full-width" disabled={!podCaptured} onClick={handleConfirmPoD} style={{ background: 'var(--courier-primary)', opacity: podCaptured ? 1 : 0.5 }}>
+                                Selesaikan Pengiriman
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-        </div>
-    );
-
-    return (
-        <div className="dashboard-container">
-            <AppBar
-                title={view === 'main' ? 'Panel Kurir' : 'Detail Pengiriman'}
-                onBack={() => (view === 'taskDetail' ? setView('main') : onBack())}
-            />
-            {/* Added spacer for fixed AppBar */}
-            <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
-
-            <div className="dashboard-content">
-                {view === 'main' && renderDashboardMain()}
-                {view === 'taskDetail' && renderTaskDetailView()}
-            </div>
         </div>
     );
 };

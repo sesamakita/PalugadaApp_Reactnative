@@ -8,10 +8,18 @@ import {
   Zap,
   Search,
   MessageSquare,
-  Bell,
-  Heart,
   Wallet as WalletIcon,
-  Star
+  Star,
+  TrendingUp,
+  ShoppingBag,
+  PlusCircle,
+  Inbox,
+  List,
+  CheckCircle,
+  Navigation,
+  LayoutDashboard,
+  Bell,
+  Heart
 } from 'lucide-react'
 import { Geolocation } from '@capacitor/geolocation'
 import { App as CapApp } from '@capacitor/app'
@@ -23,6 +31,8 @@ import CourierDashboard from './CourierDashboard'
 import ProductDetail from './ProductDetail'
 import Cart from './Cart'
 import Checkout from './Checkout'
+import usePersistedState from './hooks/usePersistedState'
+import { STORAGE_KEYS } from './services/StorageService'
 
 import PublicStore from './PublicStore'
 import logo from './assets/branding/palugada-logo-main.png'
@@ -65,25 +75,25 @@ const regionalMapping = {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = usePersistedState(STORAGE_KEYS.IS_LOGGED_IN, false)
   const [view, setView] = useState('home')
   const [activeCategory, setActiveCategory] = useState('Semua')
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedStore, setSelectedStore] = useState(null)
-  const [cartItems, setCartItems] = useState([])
-  const [userLocation, setUserLocation] = useState('SULTENG')
+  const [cartItems, setCartItems] = usePersistedState(STORAGE_KEYS.CART_ITEMS, [])
+  const [userLocation, setUserLocation] = usePersistedState(STORAGE_KEYS.USER_LOCATION, 'SULTENG')
+  const [currentUser, setCurrentUser] = usePersistedState(STORAGE_KEYS.CURRENT_USER, null)
+  const [appRole, setAppRole] = usePersistedState(STORAGE_KEYS.APP_ROLE, 'buyer')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
   const [walletRole, setWalletRole] = useState('buyer') // 'buyer', 'seller', 'courier'
   const [walletBackView, setWalletBackView] = useState('profile') // view to go back to
+  const [hasNotifications, setHasNotifications] = useState(false) // For conditional badge
 
   // Mock wallet balance
   const walletBalance = 350000
 
   // Favorites Logic
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('user_favorites');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = usePersistedState(STORAGE_KEYS.USER_FAVORITES, [])
 
   useEffect(() => {
     // Initialize StatusBar for immersive experience
@@ -102,9 +112,27 @@ function App() {
     // Scroll to top when view changes
     window.scrollTo(0, 0);
     document.querySelectorAll('.scroll-content, .dashboard-content').forEach(el => el.scrollTop = 0);
+  }, [view]);
 
-    localStorage.setItem('user_favorites', JSON.stringify(favorites));
-  }, [favorites, view]);
+  // Dynamic Theme Effect - Injects CSS variables based on appRole
+  useEffect(() => {
+    const root = document.documentElement;
+    const themes = {
+      buyer: { primary: '#003078', dark: '#002050', tint: '#e0f2fe' },
+      seller: { primary: '#059669', dark: '#047857', tint: '#d1fae5' },
+      courier: { primary: '#d97706', dark: '#b45309', tint: '#fef3c7' }
+    };
+    
+    const theme = themes[appRole] || themes.buyer;
+    root.style.setProperty('--primary', theme.primary);
+    root.style.setProperty('--primary-dark', theme.dark);
+    root.style.setProperty('--theme-light', theme.tint);
+    
+    // Also update StatusBar color if on native
+    if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+      StatusBar.setBackgroundColor({ color: theme.dark }).catch(() => {});
+    }
+  }, [appRole]);
 
   const handleToggleFavorite = (product) => {
     setFavorites(prev => {
@@ -202,7 +230,11 @@ function App() {
   }
 
   // Views that are primary tabs and should keep the bottom nav
-  const isTabVisible = ['home', 'explore', 'tracking', 'profile', 'store-list'].includes(view)
+  const isTabVisible = [
+    'home', 'explore', 'tracking', 'profile', 'store-list',
+    'seller-products', 'seller-orders', 'add-product',
+    'available-orders', 'courier-map', 'wallet', 'courier', 'courier-community'
+  ].includes(view)
 
   const renderContent = () => {
     switch (view) {
@@ -210,6 +242,7 @@ function App() {
         return <Tracking onBack={() => setView('home')} />
       case 'seller':
         return <SellerDashboard
+          activeView={view}
           onBack={() => setView('home')}
           onNavigate={(target) => {
             if (target === 'wallet') {
@@ -225,16 +258,37 @@ function App() {
         />
       case 'courier':
         return <CourierDashboard
-          onBack={() => setView('home')}
+          activeView={view}
+          onBack={() => {
+            setAppRole('buyer');
+            setView('home');
+          }}
           onNavigate={(target) => {
             if (target === 'wallet') {
               setWalletRole('courier');
-              setWalletBackView('courier');
+              setWalletBackView('home');
               setView('wallet');
             } else {
               setView(target);
             }
           }}
+        />
+      case 'seller-products':
+      case 'seller-orders':
+      case 'add-product':
+        // Pass the sub-view to the dashboard
+        return <SellerDashboard 
+            activeView={view}
+            onBack={() => setAppRole('buyer')}
+            onNavigate={(target) => setView(target)}
+        />
+      case 'available-orders':
+      case 'courier-map':
+        // Pass the sub-view to the dashboard
+        return <CourierDashboard 
+            activeView={view}
+            onBack={() => setAppRole('buyer')}
+            onNavigate={(target) => setView(target)}
         />
       case 'chat':
         return <Chat onBack={() => setView('home')} />
@@ -317,15 +371,31 @@ function App() {
         return <Profile
           onNavigate={(target) => {
             if (target === 'wallet') {
-              setWalletRole('buyer');
+              setWalletRole(appRole);
               setWalletBackView('profile');
               setView('wallet');
             } else {
               setView(target);
             }
           }}
-          onLogout={() => setIsLoggedIn(false)}
+          onLogout={() => {
+            setIsLoggedIn(false);
+            setCurrentUser(null);
+            setAppRole('buyer');
+          }}
+          currentUser={currentUser}
+          appRole={appRole}
+          onRoleChange={(newRole) => {
+            setAppRole(newRole);
+            setView('home');
+          }}
         />
+      case 'auth':
+        return <Auth onLogin={(user) => {
+          if (user) setCurrentUser(user);
+          setIsLoggedIn(true);
+          setView('home');
+        }} />
       case 'personal-info':
         return <PersonalInfo onBack={() => setView('profile')} />
       case 'my-address':
@@ -339,24 +409,85 @@ function App() {
       case 'wallet':
         return <Wallet onBack={() => setView(walletBackView)} userRole={walletRole} />
       case 'courier-registration':
-        return <CourierRegistration onBack={() => setView('home')} onComplete={() => setView('courier')} />
+        return <CourierRegistration 
+          onBack={() => setView('home')} 
+          onComplete={() => {
+            if (currentUser) {
+              const updatedUser = { ...currentUser, isCourier: true };
+              setCurrentUser(updatedUser);
+            }
+            setAppRole('courier');
+            setView('home');
+          }} 
+        />
       case 'courier-profile':
         return <CourierProfile onBack={() => setView('courier')} />
       case 'courier-community':
-        return <CourierCommunity onBack={() => setView('courier')} />
+        return <CourierCommunity onBack={() => setView('home')} />
       case 'seller-registration':
-        return <SellerRegistration onBack={() => setView('home')} onComplete={() => setView('seller')} />
+        return <SellerRegistration 
+          onBack={() => setView('home')} 
+          onComplete={() => {
+            if (currentUser) {
+              const updatedUser = { ...currentUser, isSeller: true };
+              setCurrentUser(updatedUser);
+            }
+            setAppRole('seller');
+            setView('home');
+          }} 
+        />
       case 'my-orders':
         return <MyOrders onBack={() => setView('home')} onTrackOrder={(order) => setView('tracking')} />
       default:
+        if (appRole === 'seller') {
+          return <SellerDashboard
+            activeView={view}
+            onBack={() => setAppRole('buyer')}
+            onNavigate={(target) => {
+              if (target === 'wallet') {
+                setWalletRole('seller');
+                setWalletBackView('home');
+                setView('wallet');
+              } else {
+                setView(target);
+              }
+            }}
+          />
+        }
+        if (appRole === 'courier') {
+          return <CourierDashboard
+            activeView={view}
+            onBack={() => setAppRole('buyer')}
+            onNavigate={(target) => {
+              if (target === 'wallet') {
+                setWalletRole('courier');
+                setWalletBackView('home');
+                setView('wallet');
+              } else {
+                setView(target);
+              }
+            }}
+          />
+        }
         return (
           <div className="home-view" style={{ width: '100%', overflowX: 'hidden' }}>
             {/* Header & Search */}
             <header className="header glass">
               <div className="user-bar">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
-                  <div className="app-logo">
+                  <div className="app-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <img src={logo} alt="Palugada Logo" />
+                    {appRole !== 'buyer' && (
+                      <span style={{ 
+                        fontSize: '10px', 
+                        background: 'var(--primary)', 
+                        color: 'white', 
+                        padding: '2px 6px', 
+                        borderRadius: '4px',
+                        fontWeight: '900',
+                        textTransform: 'uppercase'
+                      }}>{appRole}</span>
+                    )}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <div style={{
@@ -380,13 +511,9 @@ function App() {
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                  <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setView('chat')}>
-                    <MessageSquare size={22} className="nav-icon-outline" strokeWidth={1.5} />
-                    <span className="dot-badge"></span>
-                  </div>
                   <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setView('notifications')}>
                     <Bell size={22} className="nav-icon-outline" strokeWidth={1.5} />
-                    <span className="dot-badge"></span>
+                    {hasNotifications && <span className="dot-badge"></span>}
                   </div>
                   <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setView('favorites')}>
                     <Heart size={22} className="nav-icon-outline" strokeWidth={1.5} />
@@ -404,6 +531,14 @@ function App() {
             </header>
 
             <div className="scroll-content">
+              {/* Minimalist Welcome Greeting with Animation */}
+              <div className="fade-in-slide-up" style={{ padding: '16px 4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Halo,</span>
+                <span style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.3px' }}>
+                  {currentUser?.name?.split(' ')[0] || 'Pelanggan'}! 👋
+                </span>
+              </div>
+
               {/* Wallet Quick Access Banner */}
               <div
                 onClick={() => {
@@ -705,40 +840,105 @@ function App() {
   }
 
   if (!isLoggedIn) {
-    return <Auth onLogin={() => setIsLoggedIn(true)} />
+    return <Auth onLogin={(user) => {
+      if (user) setCurrentUser(user);
+      setIsLoggedIn(true);
+      setView('home'); // Redirect to dashboard after login
+    }} />
   }
 
   return (
     <div className="app-container" style={{ paddingBottom: isTabVisible ? '70px' : '0' }}>
       {renderContent()}
 
-      {/* Bottom Nav - Only visible on main tabs */}
+      {/* Bottom Nav - Dynamic based on appRole */}
       {isTabVisible && (
         <nav className="bottom-nav glass">
-          <div className={`nav-item ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
-            <Home size={22} strokeWidth={view === 'home' ? 2.5 : 1.5} />
-            <span>Beranda</span>
-            {view === 'home' && <div className="nav-indicator"></div>}
-          </div>
-          <div className={`nav-item ${view === 'explore' ? 'active' : ''}`} onClick={() => setView('explore')}>
-            <Compass size={22} strokeWidth={view === 'explore' ? 2.5 : 1.5} />
-            <span>Jelajah</span>
-            {view === 'explore' && <div className="nav-indicator"></div>}
-          </div>
+          {/* BUYER NAV */}
+          {appRole === 'buyer' && (
+            <>
+              <div className={`nav-item ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
+                <Home size={22} strokeWidth={view === 'home' ? 2.5 : 1.5} />
+                <span>Beranda</span>
+                {view === 'home' && <div className="nav-indicator"></div>}
+              </div>
+              <div className={`nav-item ${view === 'explore' ? 'active' : ''}`} onClick={() => setView('explore')}>
+                <Compass size={22} strokeWidth={view === 'explore' ? 2.5 : 1.5} />
+                <span>Jelajah</span>
+                {view === 'explore' && <div className="nav-indicator"></div>}
+              </div>
+              <div className="nav-fab-container">
+                <div className="nav-fab" onClick={() => setView('cart')}>
+                  <Zap size={24} fill="white" color="white" />
+                </div>
+                <span className="fab-label">Beli Cepat</span>
+              </div>
+              <div className={`nav-item ${view === 'tracking' ? 'active' : ''}`} onClick={() => setView('tracking')}>
+                <Package size={22} strokeWidth={view === 'tracking' ? 2.5 : 1.5} />
+                <span>Pesanan</span>
+                {view === 'tracking' && <div className="nav-indicator"></div>}
+              </div>
+            </>
+          )}
 
-          {/* Central FAB */}
-          <div className="nav-fab-container">
-            <div className="nav-fab" onClick={() => setView('cart')}>
-              <Zap size={24} fill="white" color="white" />
-            </div>
-            <span className="fab-label">Beli Cepat</span>
-          </div>
+          {/* SELLER NAV */}
+          {appRole === 'seller' && (
+            <>
+              <div className={`nav-item ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
+                <TrendingUp size={22} strokeWidth={view === 'home' ? 2.5 : 1.5} />
+                <span>Bisnis</span>
+                {view === 'home' && <div className="nav-indicator"></div>}
+              </div>
+              <div className={`nav-item ${view === 'seller-products' ? 'active' : ''}`} onClick={() => setView('seller-products')}>
+                <ShoppingBag size={22} strokeWidth={view === 'seller-products' ? 2.5 : 1.5} />
+                <span>Produk</span>
+                {view === 'seller-products' && <div className="nav-indicator"></div>}
+              </div>
+              <div className="nav-fab-container">
+                <div className="nav-fab" style={{ background: 'var(--primary)' }} onClick={() => setView('add-product')}>
+                  <PlusCircle size={24} color="white" />
+                </div>
+                <span className="fab-label">Tambah</span>
+              </div>
+              <div className={`nav-item ${view === 'seller-orders' ? 'active' : ''}`} onClick={() => setView('seller-orders')}>
+                <Inbox size={22} strokeWidth={view === 'seller-orders' ? 2.5 : 1.5} />
+                <span>Pesanan</span>
+                {view === 'seller-orders' && <div className="nav-indicator"></div>}
+              </div>
+            </>
+          )}
 
-          <div className={`nav-item ${view === 'tracking' ? 'active' : ''}`} onClick={() => setView('tracking')}>
-            <Package size={22} strokeWidth={view === 'tracking' ? 2.5 : 1.5} />
-            <span>Pesanan</span>
-            {view === 'tracking' && <div className="nav-indicator"></div>}
-          </div>
+          {/* COURIER NAV */}
+          {appRole === 'courier' && (
+            <>
+              <div className={`nav-item ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
+                <LayoutDashboard size={22} strokeWidth={view === 'home' ? 2.5 : 1.5} />
+                <span>Dashboard</span>
+                {view === 'home' && <div className="nav-indicator"></div>}
+              </div>
+              <div className={`nav-item ${view === 'available-orders' ? 'active' : ''}`} onClick={() => setView('available-orders')}>
+                <List size={22} strokeWidth={view === 'available-orders' ? 2.5 : 1.5} />
+                <span>Tugas</span>
+                {view === 'available-orders' && <div className="nav-indicator"></div>}
+              </div>
+              <div className="nav-fab-container">
+                <div className="nav-fab" style={{ background: 'var(--primary)' }} onClick={() => setView('courier-map')}>
+                  <Navigation size={24} color="white" />
+                </div>
+                <span className="fab-label">Peta</span>
+              </div>
+              <div className={`nav-item ${view === 'wallet' ? 'active' : ''}`} onClick={() => {
+                setWalletRole('courier');
+                setWalletBackView('home');
+                setView('wallet');
+              }}>
+                <WalletIcon size={22} strokeWidth={view === 'wallet' ? 2.5 : 1.5} />
+                <span>Dompet</span>
+                {view === 'wallet' && <div className="nav-indicator"></div>}
+              </div>
+            </>
+          )}
+
           <div className={`nav-item ${view === 'profile' ? 'active' : ''}`} onClick={() => setView('profile')}>
             <User size={22} strokeWidth={view === 'profile' ? 2.5 : 1.5} />
             <span>Profil</span>

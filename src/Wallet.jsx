@@ -243,7 +243,7 @@ const Wallet = ({ onBack, userRole = 'buyer' }) => {
                             view === 'withdraw' ? 'Tarik Saldo' :
                                 'Riwayat Transaksi'
                 }
-                onBack={() => view === 'main' ? onBack() : setView('main')}
+                onBack={(view === 'main' && userRole === 'courier') ? null : (() => view === 'main' ? onBack() : setView('main'))}
             />
             {/* Added spacer for fixed AppBar — includes safe-top for status bar */}
             <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>

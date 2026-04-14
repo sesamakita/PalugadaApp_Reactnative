@@ -104,61 +104,101 @@
     margin-bottom: 16px;
 }
 
-.role-switcher {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+/* Mode Center Redesign */
+.mode-center {
+    padding: 16px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
-.role-item {
+.mode-selector-v2 {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 14px;
+    position: relative;
+    margin-bottom: 12px;
+    z-index: 1;
+}
+
+.mode-slug {
+    position: absolute;
+    width: calc(33.33% - 4px);
+    height: calc(100% - 8px);
+    top: 4px;
+    left: 4px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+
+/* Slug Positioning */
+.mode-selector-v2.buyer .mode-slug {
+    left: 4px;
+    background: linear-gradient(135deg, #003078 0%, #0056b3 100%);
+}
+
+.mode-selector-v2.seller .mode-slug {
+    left: calc(33.33% + 2px);
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+.mode-selector-v2.courier .mode-slug {
+    left: calc(66.66%);
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+}
+
+.mode-option {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 12px 8px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid #f1f5f9;
-}
-
-.role-item span {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.role-item.active {
-    background: rgba(0, 48, 120, 0.03);
-    border-color: var(--primary);
-}
-
-.role-item.active span {
-    color: var(--primary);
-}
-
-.role-icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
     justify-content: center;
+    gap: 6px;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+    color: #64748b;
+    position: relative;
 }
 
-.role-icon-box.buyer {
-    background: #e0f2fe;
-    color: #0369a1;
+.mode-option.active {
+    color: white;
 }
 
-.role-icon-box.seller {
-    background: #fef3c7;
-    color: #92400e;
+.mode-option span {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.role-icon-box.courier {
-    background: #dcfce7;
-    color: #15803d;
+.mode-description {
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
+    padding: 0 10px;
+    line-height: 1.4;
+}
+
+.dot-active {
+    position: absolute;
+    top: 8px;
+    right: 25%;
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    border: 1.5px solid white;
+}
+
+.mode-selector-v2.seller .dot-active,
+.mode-selector-v2.courier .dot-active {
+    background: white;
 }
 
 .menu-list {

@@ -24,33 +24,35 @@ const CourierHistory = ({ isSimplified = false }) => {
 
     if (isSimplified) {
         return (
-            <div className="history-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="history-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {filteredHistory.slice(0, 3).map((item, index) => (
-                    <div key={index} className="history-item card" style={{
-                        padding: '16px',
+                    <div key={index} className="history-item glass-card" style={{
+                        padding: '12px 16px',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        gap: '12px'
+                        gap: '12px',
+                        background: 'rgba(255,255,255,0.4)',
+                        border: '1px solid rgba(255,255,255,0.2)'
                     }}>
                         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                             <div style={{
-                                width: '36px',
-                                height: '36px',
+                                width: '32px',
+                                height: '32px',
                                 background: '#f0fdf4',
                                 borderRadius: '50%',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}>
-                                <CheckCircle2 size={16} color="#15803d" />
+                                <CheckCircle2 size={14} color="#10b981" />
                             </div>
                             <div>
-                                <div style={{ fontSize: '13px', fontWeight: '700' }}>{item.id}</div>
-                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{item.shop}</div>
+                                <div style={{ fontSize: '13px', fontWeight: '800', color: '#1e293b' }}>{item.id}</div>
+                                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '500' }}>{item.shop}</div>
                             </div>
                         </div>
-                        <div style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '14px' }}>{item.income}</div>
+                        <div style={{ fontWeight: '900', color: 'var(--courier-secondary)', fontSize: '14px' }}>{item.income}</div>
                     </div>
                 ))}
             </div>
@@ -59,82 +61,79 @@ const CourierHistory = ({ isSimplified = false }) => {
 
     return (
         <div className="scroll-content">
-            <div className="search-filter-row" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                <div className="search-bar-inline" style={{
+            <div className="search-filter-row" style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+                <div className="glass-card" style={{
                     flex: 1,
-                    background: 'white',
-                    padding: '8px 12px',
-                    borderRadius: 'var(--radius-sm)',
+                    background: 'rgba(255,255,255,0.6)',
+                    padding: '10px 16px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    border: '1px solid #e2e8f0'
+                    gap: '10px',
                 }}>
-                    <Search size={16} color="#94a3b8" />
+                    <Search size={18} color="#94a3b8" />
                     <input
                         type="text"
-                        placeholder="Cari ID tugas atau nama..."
+                        placeholder="Cari ID atau Toko..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        style={{ border: 'none', outline: 'none', width: '100%', fontSize: '14px' }}
+                        style={{ border: 'none', outline: 'none', width: '100%', fontSize: '14px', background: 'transparent' }}
                     />
                 </div>
-                <button className="filter-btn-icon" style={{
-                    background: 'white',
-                    padding: '8px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid #e2e8f0',
+                <button className="glass-card" style={{
+                    padding: '10px',
+                    border: 'none',
                     display: 'flex',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    color: 'var(--courier-primary)'
                 }}>
-                    <Calendar size={20} color="var(--primary)" />
+                    <Calendar size={20} />
                 </button>
             </div>
 
             <div className="history-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '80px' }}>
                 {filteredHistory.map((item, index) => (
-                    <div key={index} className="history-item card" style={{
+                    <div key={index} className="history-item glass-card" style={{
                         padding: '16px',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         gap: '12px'
                     }}>
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
                             <div style={{
                                 width: '40px',
                                 height: '40px',
                                 background: '#f0fdf4',
-                                borderRadius: '50%',
+                                borderRadius: '14px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}>
-                                <CheckCircle2 size={20} color="#15803d" />
+                                <CheckCircle2 size={20} color="#10b981" />
                             </div>
                             <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span style={{ fontSize: '13px', fontWeight: '700' }}>{item.id}</span>
-                                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>{item.date} • {item.time}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <span style={{ fontSize: '14px', fontWeight: '800', color: '#1e293b' }}>{item.id}</span>
+                                    <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600' }}>{item.date}</span>
                                 </div>
-                                <div style={{ fontSize: '12px', marginTop: '2px', color: 'var(--text-muted)' }}>
-                                    Dari: <strong>{item.shop}</strong>
+                                <div style={{ fontSize: '12px', color: '#1e293b', fontWeight: '600' }}>
+                                    {item.shop} <span style={{ color: '#94a3b8', fontWeight: '400' }}>→</span> {item.customer}
                                 </div>
-                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                    Ke: <strong>{item.customer}</strong>
+                                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                                    Selesai pukul {item.time}
                                 </div>
                             </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '14px' }}>{item.income}</div>
-                            <div style={{ fontSize: '10px', color: '#15803d', fontWeight: '600' }}>Berhasil</div>
+                            <div style={{ fontWeight: '900', color: 'var(--courier-secondary)', fontSize: '15px' }}>{item.income}</div>
+                            <div style={{ fontSize: '10px', color: '#10b981', fontWeight: '800', background: '#ecfdf5', padding: '2px 6px', borderRadius: '4px', marginTop: '4px', display: 'inline-block' }}>Sukses</div>
                         </div>
                     </div>
                 ))}
 
                 {filteredHistory.length === 0 && (
-                    <div style={{ textAlign: 'center', padding: '40px 20px', color: '#94a3b8' }}>
-                        <p>Tidak ada riwayat ditemukan.</p>
+                    <div className="glass-card" style={{ textAlign: 'center', padding: '40px 20px', color: '#94a3b8' }}>
+                        <p style={{ fontWeight: '600' }}>Riwayat tidak ditemukan.</p>
                     </div>
                 )}
             </div>

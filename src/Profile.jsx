@@ -15,15 +15,22 @@ import {
     Wallet,
     Package
 } from 'lucide-react';
+import { STORAGE_KEYS } from './services/StorageService';
+import StorageService from './services/StorageService';
 import './Profile.css';
 
-const Profile = ({ onNavigate, onLogout }) => {
-    const user = {
+const Profile = ({ onNavigate, onLogout, currentUser, appRole = 'buyer', onRoleChange }) => {
+    const defaultUser = {
         name: "Deni Indrayana",
         email: "deniindrayana@email.com",
         role: "Member Gold",
         avatar: `${import.meta.env.BASE_URL}deni_foto.jpeg?v=1`
     };
+
+    const user = currentUser || defaultUser;
+    
+    // Default avatar logic if no custom avatar is provided
+    const userAvatar = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0ead98&color=fff&bold=true`;
 
     const menuItems = [
         { icon: <Package size={20} />, label: "Pesanan Saya", sub: "Lihat status pesanan & riwayat", route: "my-orders" },
@@ -45,7 +52,7 @@ const Profile = ({ onNavigate, onLogout }) => {
             {/* Profile Header */}
             <div className="profile-header">
                 <div className="profile-avatar-container">
-                    <img src={user.avatar} alt={user.name} className="profile-avatar" />
+                    <img src={userAvatar} alt={user.name} className="profile-avatar" />
                     <div className="edit-avatar-btn">
                         <Settings size={14} color="white" />
                     </div>
@@ -56,28 +63,45 @@ const Profile = ({ onNavigate, onLogout }) => {
 
             <div className="profile-content">
                 {/* Role Switcher */}
-                <div className="section-card">
+                <div className="section-card mode-center">
                     <h3 className="section-title">Mode Aplikasi</h3>
-                    <div className="role-switcher">
-                        <div className="role-item active" onClick={() => onNavigate('home')}>
-                            <div className="role-icon-box buyer">
-                                <ShoppingBag size={24} />
-                            </div>
+                    <div className={ `mode-selector-v2 ${appRole}` }>
+                        <div className="mode-slug"></div>
+                        
+                        <div className={`mode-option ${appRole === 'buyer' ? 'active' : ''}`} onClick={() => onRoleChange('buyer')}>
+                            <ShoppingBag size={20} />
                             <span>Buyer</span>
                         </div>
-                        <div className="role-item" onClick={() => onNavigate('seller')}>
-                            <div className="role-icon-box seller">
-                                <Store size={24} />
-                            </div>
+                        
+                        <div className={`mode-option ${appRole === 'seller' ? 'active' : ''}`} onClick={() => {
+                            if (currentUser?.isSeller) {
+                                onRoleChange('seller');
+                            } else {
+                                onNavigate('seller-registration');
+                            }
+                        }}>
+                            <Store size={20} />
                             <span>Seller</span>
+                            {currentUser?.isSeller && <div className="dot-active"></div>}
                         </div>
-                        <div className="role-item" onClick={() => onNavigate('courier')}>
-                            <div className="role-icon-box courier">
-                                <Bike size={24} />
-                            </div>
+                        
+                        <div className={`mode-option ${appRole === 'courier' ? 'active' : ''}`} onClick={() => {
+                            if (currentUser?.isCourier) {
+                                onRoleChange('courier');
+                            } else {
+                                onNavigate('courier-registration');
+                            }
+                        }}>
+                            <Bike size={20} />
                             <span>Kurir</span>
+                            {currentUser?.isCourier && <div className="dot-active"></div>}
                         </div>
                     </div>
+                    <p className="mode-description">
+                        {appRole === 'buyer' ? 'Temukan produk lokal pilihan Anda' : 
+                         appRole === 'seller' ? 'Kelola toko dan tingkatkan penjualan' : 
+                         'Mulai tugas pengantaran sekarang'}
+                    </p>
                 </div>
 
                 {/* Main Menu */}
@@ -104,6 +128,29 @@ const Profile = ({ onNavigate, onLogout }) => {
                     <LogOut size={20} />
                     <span>Keluar Akun</span>
                 </button>
+
+                {/* Developer Tools (Hidden in prod usually, here for testing) */}
+                <div className="section-card" style={{ marginTop: '32px', opacity: 0.6, border: '1px dashed #cbd5e1' }}>
+                    <h3 className="section-title">Developer Tools</h3>
+                    <button 
+                        className="menu-item" 
+                        style={{ width: '100%', background: 'transparent', border: 'none', padding: '12px' }}
+                        onClick={() => {
+                            if(window.confirm('Bersihkan semua data aplikasi?')) {
+                                StorageService.clearApp();
+                                window.location.reload();
+                            }
+                        }}
+                    >
+                        <div className="menu-icon-wrapper" style={{ background: '#fef2f2', color: '#ef4444' }}>
+                            <Settings size={20} />
+                        </div>
+                        <div className="menu-text">
+                            <span className="menu-label" style={{ color: '#ef4444' }}>Reset Semua Data</span>
+                            <span className="menu-sub">Hapus cache, login, keranjang & favorit</span>
+                        </div>
+                    </button>
+                </div>
             </div>
 
             <div className="profile-footer">

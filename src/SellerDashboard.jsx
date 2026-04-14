@@ -10,16 +10,32 @@ import {
     Store,
     Clock,
     Map,
-    Wallet as WalletIcon
+    Wallet as WalletIcon,
+    Truck,
+    Navigation as NavigationIcon,
+    BarChart2,
+    Tags,
+    TrendingUp,
+    AlertTriangle,
+    MoreVertical,
+    CheckCircle
 } from 'lucide-react';
 import './Dashboard.css';
 import AddressMap from './AddressMap';
 import AppBar from './components/AppBar';
 import storeCover from './assets/branding/store_cover.png';
 
-const SellerDashboard = ({ onBack, onNavigate }) => {
+const SellerDashboard = ({ onBack, onNavigate, activeView }) => {
     const [activeTab, setActiveTab] = useState('main'); // main, addProduct, orderDetail
     
+    // Sync external view with internal tab
+    useEffect(() => {
+        if (activeView === 'seller-products') setActiveTab('productsList');
+        if (activeView === 'add-product') setActiveTab('addProduct');
+        if (activeView === 'seller-orders') setActiveTab('ordersList');
+        if (activeView === 'home' || activeView === 'seller') setActiveTab('main');
+    }, [activeView]);
+
     // Scroll to top when internal view changes
     useEffect(() => {
         document.querySelectorAll('.dashboard-content, .scroll-content').forEach(el => el.scrollTop = 0);
@@ -32,6 +48,40 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
         lng: 119.8707,
         address: 'Jl. Sam Ratulangi, Palu City, Sulawesi Tengah'
     });
+
+    const [productFilter, setProductFilter] = useState('Semua');
+    const [myProducts, setMyProducts] = useState([
+        { id: '1', name: 'Bawang Goreng Palu Super 500g', category: 'Kuliner', price: 'Rp 65.000', stock: 24, sold: 112, isActive: true },
+        { id: '2', name: 'Kain Tenun Donggala Asli (Sutra)', category: 'Barang', price: 'Rp 250.000', stock: 5, sold: 8, isActive: true },
+        { id: '3', name: 'Kopi Toraja Premium 250g', category: 'Kuliner', price: 'Rp 45.000', stock: 0, sold: 450, isActive: false },
+        { id: '4', name: 'Kerajinan Kayu Eboni Palu', category: 'Barang', price: 'Rp 120.000', stock: 12, sold: 34, isActive: true },
+        { id: '5', name: 'Sambal Roa Botolan 200ml', category: 'Kuliner', price: 'Rp 25.000', stock: 0, sold: 89, isActive: false }
+    ]);
+
+    const handleToggleProduct = (id) => {
+        setMyProducts(products => 
+            products.map(p => p.id === id ? { ...p, isActive: !p.isActive } : p)
+        );
+    };
+
+    const [orderFilterTab, setOrderFilterTab] = useState('Baru');
+    const [myOrders, setMyOrders] = useState([
+        { id: '#ORD-991', buyer: 'Asep Saepul', items: 'Kopi Toraja + 2 lainnya', status: 'Baru', price: 'Rp 145.000', time: 'Baru saja', img: '' },
+        { id: '#ORD-990', buyer: 'Budi Santoso', items: 'Kain Tenun Donggala', status: 'Baru', price: 'Rp 250.000', time: '12 mnt lalu', img: '' },
+        { id: '#ORD-988', buyer: 'Cindy', items: 'Sambal Roa Botolan (x3)', status: 'Diproses', price: 'Rp 75.000', time: '45 mnt lalu', img: '' },
+        { id: '#ORD-985', buyer: 'Deni', items: 'Kerajinan Eboni', status: 'Ajak Kurir', price: 'Rp 120.000', time: 'Kemarin', img: '' }
+    ]);
+
+    const handleProcessOrder = (id) => {
+        setMyOrders(orders => orders.map(o => o.id === id ? { ...o, status: 'Diproses' } : o));
+        setOrderFilterTab('Diproses');
+    };
+
+    const handleCallCourier = (id) => {
+        setMyOrders(orders => orders.map(o => o.id === id ? { ...o, status: 'Ajak Kurir' } : o));
+        setOrderFilterTab('Ajak Kurir');
+        alert("Pencarian kurir terdekat dimulai!"); // Simulasi modal
+    };
 
     // Helper: parse "Rp 450.000" → 450000
     const parsePrice = (priceStr) => {
@@ -68,49 +118,59 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
 
     const renderMainView = () => (
         <div className="scroll-content">
-            <div className="stats-grid">
-                {stats.map((stat, i) => (
-                    <div key={i} className="stat-card card">
-                        <span className="stat-label">{stat.label}</span>
-                        <span className="stat-value" style={{ color: stat.color }}>{stat.value}</span>
+            
+            {/* Financial Hero Card */}
+            <div className="financial-hero-card fadeIn">
+                <div className="financial-header">
+                    <span>Saldo Tersedia</span>
+                    <div className="financial-trend">
+                        <TrendingUp size={12} color="white" />
+                        +15%
                     </div>
-                ))}
+                </div>
+                <div className="financial-balance">Rp {(netRevenue / 1000).toLocaleString('id-ID')}.000</div>
+                <div className="financial-actions">
+                    <button className="btn-withdraw" onClick={() => onNavigate('wallet')}>
+                        Tarik Dana
+                    </button>
+                    <button className="btn-history" onClick={() => onNavigate('wallet')}>
+                        Riwayat
+                    </button>
+                </div>
+            </div>
+
+            {/* Urgent Tasks Banner */}
+            <div className="urgent-banner fadeIn" onClick={() => setActiveTab('ordersList')} style={{ cursor: 'pointer' }}>
+                <div className="urgent-banner-icon">
+                    <AlertTriangle size={18} strokeWidth={2.5} />
+                </div>
+                <div className="urgent-banner-text">
+                    <div className="urgent-banner-title">2 Pesanan Mendekati Batas!</div>
+                    <div className="urgent-banner-desc">Segera kirim hari ini untuk hindari penalti.</div>
+                </div>
+                <ArrowRight size={16} color="#be123c" />
             </div>
 
             <div className="section-title">
-                <h3>Kelola Toko</h3>
+                <h3>Pusat Bisnis</h3>
             </div>
 
             <div className="actions-grid">
-                <button className="action-btn card" onClick={() => setActiveTab('addProduct')}>
-                    <span className="action-icon"><Plus size={24} strokeWidth={1.5} color="var(--primary)" /></span>
-                    <span className="action-text">Tambah Produk</span>
+                <button className="action-btn card" onClick={() => {}}>
+                    <span className="action-icon"><BarChart2 size={24} strokeWidth={1.5} color="var(--primary)" /></span>
+                    <span className="action-text">Analisa Toko</span>
                 </button>
-                <button className="action-btn card">
-                    <span className="action-icon"><Package size={24} strokeWidth={1.5} color="var(--primary)" /></span>
-                    <span className="action-text">Stok Barang</span>
+                <button className="action-btn card" onClick={() => {}}>
+                    <span className="action-icon"><Tags size={24} strokeWidth={1.5} color="var(--primary)" /></span>
+                    <span className="action-text">Promo & Diskon</span>
                 </button>
-                <button className="action-btn card">
+                <button className="action-btn card" onClick={() => {}}>
                     <span className="action-icon"><MessageSquare size={24} strokeWidth={1.5} color="var(--primary)" /></span>
                     <span className="action-text">Chat Pembeli</span>
                 </button>
                 <button className="action-btn card" onClick={() => setActiveTab('profile')}>
                     <span className="action-icon"><Settings size={24} strokeWidth={1.5} color="var(--primary)" /></span>
                     <span className="action-text">Profil Toko</span>
-                </button>
-                <button className="action-btn card" onClick={() => onNavigate('wallet')}>
-                    <span className="action-icon"><WalletIcon size={24} strokeWidth={1.5} color="var(--primary)" /></span>
-                    <span className="action-text">Dompet Toko</span>
-                </button>
-
-                {/* 🎯 TEST BUTTON FOR SELLER REGISTRATION */}
-                <button
-                    className="action-btn card"
-                    onClick={() => onNavigate('seller-registration')}
-                    style={{ background: 'linear-gradient(135deg, #0ead9820, #fbb03b20)', border: '1px solid var(--primary)' }}
-                >
-                    <span className="action-icon"><Plus size={24} strokeWidth={2} color="var(--primary)" /></span>
-                    <span className="action-text" style={{ fontWeight: '800' }}>🎯 Demo: Daftar Penjual</span>
                 </button>
             </div>
 
@@ -138,6 +198,158 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
             </div>
         </div>
     );
+
+    const renderProductsListView = () => {
+        const filteredProducts = myProducts.filter(p => {
+            if (productFilter === 'Aktif') return p.isActive;
+            if (productFilter === 'Habis') return !p.isActive;
+            return true;
+        });
+
+        const activeCount = myProducts.filter(p => p.isActive).length;
+        const outOfStockCount = myProducts.filter(p => !p.isActive).length;
+
+        return (
+            <div className="scroll-content" style={{ paddingBottom: '80px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
+                    <div>
+                        <h2 style={{ margin: '0 0 4px', fontSize: '20px' }}>Daftar Produk</h2>
+                        <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Miliki kontrol penuh atas katalog Anda</span>
+                    </div>
+                </div>
+
+                <div className="stats-grid" style={{ marginBottom: '16px' }}>
+                    <div className="stat-card card" style={{ padding: '12px' }}>
+                        <span className="stat-label">Produk Aktif</span>
+                        <span className="stat-value" style={{ color: 'var(--primary)', fontSize: '20px' }}>{activeCount}</span>
+                    </div>
+                    <div className="stat-card card" style={{ padding: '12px' }}>
+                        <span className="stat-label">Stok Habis</span>
+                        <span className="stat-value" style={{ color: '#ef4444', fontSize: '20px' }}>{outOfStockCount}</span>
+                    </div>
+                </div>
+
+                <div className="filter-pills">
+                    {['Semua', 'Aktif', 'Habis'].map(f => (
+                        <div 
+                            key={f} 
+                            className={`filter-pill ${productFilter === f ? 'active' : ''}`}
+                            onClick={() => setProductFilter(f)}
+                        >
+                            {f}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="product-list-container">
+                    {filteredProducts.map(product => (
+                        <div key={product.id} className={`seller-product-card card fadeIn ${!product.isActive ? 'inactive' : ''}`}>
+                            <div className="seller-product-img">
+                                {/* Simulasi gambar menggunakan ikon jika kosong */}
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#e2e8f0', borderRadius: '8px' }}>
+                                    <Package size={24} color="#94a3b8" />
+                                </div>
+                            </div>
+                            <div className="seller-product-info">
+                                <div className="seller-product-title">{product.name}</div>
+                                <div className="seller-product-category">{product.category}</div>
+                                <div className="seller-product-price">{product.price}</div>
+                                <div className="seller-product-stats">
+                                    <span className={product.stock === 0 ? 'alert' : ''}>Stok: {product.stock}</span>
+                                    <span>•</span>
+                                    <span>Terjual: {product.sold}</span>
+                                </div>
+                            </div>
+                            <div className="seller-product-actions">
+                                <MoreVertical size={18} color="var(--text-muted)" />
+                                <label className="toggle-switch">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={product.isActive} 
+                                        onChange={() => handleToggleProduct(product.id)}
+                                    />
+                                    <span className="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    const renderOrdersListView = () => {
+        const filteredOrders = myOrders.filter(o => o.status === orderFilterTab);
+        const newOrdersCount = myOrders.filter(o => o.status === 'Baru').length;
+
+        return (
+            <div className="scroll-content" style={{ paddingBottom: '80px', paddingTop: '8px' }}>
+                {/* Kanban Tabs */}
+                <div className="order-kanban-tabs">
+                    {['Baru', 'Diproses', 'Ajak Kurir', 'Selesai'].map(tab => (
+                        <div 
+                            key={tab} 
+                            className={`kanban-tab ${orderFilterTab === tab ? 'active' : ''}`}
+                            onClick={() => setOrderFilterTab(tab)}
+                        >
+                            {tab}
+                            {tab === 'Baru' && newOrdersCount > 0 && (
+                                <span className="kanban-badge">{newOrdersCount}</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {filteredOrders.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)' }}>
+                        <Package size={48} opacity={0.3} style={{ marginBottom: '16px' }} />
+                        <p>Tidak ada pesanan di tahap ini.</p>
+                    </div>
+                ) : (
+                    <div className="order-list-container">
+                        {filteredOrders.map(order => (
+                            <div key={order.id} className="order-list-card fadeIn">
+                                <div className="order-list-card-header">
+                                    <h4>{order.id}</h4>
+                                    <span className="time">{order.time}</span>
+                                </div>
+                                <div className="order-list-card-body">
+                                    <div className="order-list-card-img">
+                                        <Package size={24} color="#94a3b8" />
+                                    </div>
+                                    <div className="order-list-card-details">
+                                        <div className="order-buyer-name">{order.buyer}</div>
+                                        <div className="order-item-desc">{order.items}</div>
+                                    </div>
+                                </div>
+                                <div className="order-list-card-footer">
+                                    <div className="order-total-price">{order.price}</div>
+                                    
+                                    {order.status === 'Baru' && (
+                                        <button className="btn-smart-action" onClick={() => handleProcessOrder(order.id)}>
+                                            <CheckCircle size={16} /> Terima & Proses
+                                        </button>
+                                    )}
+                                    
+                                    {order.status === 'Diproses' && (
+                                        <button className="btn-smart-action" onClick={() => handleCallCourier(order.id)}>
+                                            <Truck size={16} /> Panggil Kurir
+                                        </button>
+                                    )}
+
+                                    {order.status === 'Ajak Kurir' && (
+                                        <button className="btn-smart-action alt" onClick={() => {}}>
+                                            <NavigationIcon size={16} /> Lacak Kurir
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     const renderAddProductView = () => (
         <div className="scroll-content">
@@ -350,14 +562,18 @@ const SellerDashboard = ({ onBack, onNavigate }) => {
                 title={
                     activeTab === 'main' ? 'Panel Penjual' :
                         activeTab === 'addProduct' ? 'Tambah Produk' :
-                            activeTab === 'orderDetail' ? 'Detail Pesanan' : 'Profil Toko'
+                            activeTab === 'orderDetail' ? 'Detail Pesanan' :
+                                activeTab === 'productsList' ? 'Kelola Produk' : 
+                                activeTab === 'ordersList' ? 'Pesanan Masuk' : 'Profil Toko'
                 }
-                onBack={() => activeTab === 'main' ? onBack() : setActiveTab('main')}
+                onBack={['main', 'addProduct', 'productsList', 'ordersList'].includes(activeTab) ? null : () => setActiveTab('main')}
             />
             {/* Added spacer for fixed AppBar */}
             <div style={{ height: 'calc(64px + var(--safe-top, 0px))' }}></div>
 
             {activeTab === 'main' && renderMainView()}
+            {activeTab === 'productsList' && renderProductsListView()}
+            {activeTab === 'ordersList' && renderOrdersListView()}
             {activeTab === 'addProduct' && renderAddProductView()}
             {activeTab === 'orderDetail' && renderOrderDetailView()}
             {activeTab === 'profile' && renderStoreProfileView()}

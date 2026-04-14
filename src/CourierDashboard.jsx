@@ -108,9 +108,9 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
     const renderHome = () => (
         <div className="scroll-content" style={{ paddingBottom: '40px' }}>
             {/* Header Premium */}
-            <div className="courier-hero-header">
-                <div className="courier-profile-row">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div className="courier-hero-header fadeIn">
+                <div className="courier-profile-row" style={{ justifyContent: 'flex-start' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <div className="courier-avatar-wrapper">
                             <div className="courier-avatar-glow">
                                 {courierInfo.name.charAt(0)}
@@ -121,19 +121,15 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
                         </div>
                         <div>
                             <div style={{ fontSize: '18px', fontWeight: '800' }}>{courierInfo.name}</div>
-                            <div style={{ fontSize: '12px', opacity: 0.7, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <Award size={12} color="var(--courier-primary)" />
+                            <div style={{ fontSize: '12px', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                                <Award size={14} color="var(--courier-primary)" />
                                 Level Gold • {courierInfo.rating} Rating
                             </div>
                         </div>
                     </div>
-                    <div className={`courier-status-chip ${isOnline ? 'online' : 'offline'}`} onClick={() => setIsOnline(!isOnline)}>
-                        <span className="dot"></span>
-                        {isOnline ? 'Online' : 'Offline'}
-                    </div>
                 </div>
 
-                <div className="courier-main-stats">
+                <div className="courier-main-stats" style={{ gap: '12px', marginBottom: '16px' }}>
                     <div className="stat-item-premium">
                         <span className="label">Pendapatan Hari Ini</span>
                         <span className="value">Rp {netDailyIncome.toLocaleString('id-ID')}</span>
@@ -143,10 +139,26 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
                         <span className="value">{courierInfo.totalDeliveries}</span>
                     </div>
                 </div>
+
+                {/* Relocated Availability Toggle */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.15)', padding: '12px 16px', borderRadius: '12px', backdropFilter: 'blur(4px)' }}>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: '700' }}>Status Ketersediaan</div>
+                        <div style={{ fontSize: '11px', opacity: 0.8, marginTop: '2px' }}>Siap jemput pesanan baru</div>
+                    </div>
+                    <div className="status-control-wrapper" onClick={() => setIsOnline(!isOnline)} style={{ padding: 0, background: 'transparent', border: 'none' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '800', opacity: 0.9, marginRight: '10px', letterSpacing: '0.5px' }}>
+                            {isOnline ? 'ONLINE' : 'OFFLINE'}
+                        </span>
+                        <div className={`toggle-switch ${isOnline ? 'active' : ''}`} style={{ width: '48px', height: '26px' }}>
+                            <div className="toggle-handle" style={{ width: '20px', height: '20px', transform: isOnline ? 'translateX(22px)' : 'translateX(0)' }}></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Quick Actions */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '24px', marginTop: '-10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '24px' }}>
                 <div className="glass-card" style={{ padding: '12px', textAlign: 'center' }} onClick={() => onNavigate('wallet')}>
                     <DollarSign size={20} color="var(--courier-primary)" style={{ marginBottom: '4px' }} />
                     <div style={{ fontSize: '10px', fontWeight: '700' }}>Dompet</div>

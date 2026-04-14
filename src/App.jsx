@@ -119,8 +119,8 @@ function App() {
     const root = document.documentElement;
     const themes = {
       buyer: { primary: '#003078', dark: '#002050', tint: '#e0f2fe' },
-      seller: { primary: '#059669', dark: '#047857', tint: '#d1fae5' },
-      courier: { primary: '#d97706', dark: '#b45309', tint: '#fef3c7' }
+      seller: { primary: '#22c55e', dark: '#064e3b', tint: '#d1fae5' },
+      courier: { primary: '#f97316', dark: '#991b1b', tint: '#fef3c7' }
     };
     
     const theme = themes[appRole] || themes.buyer;
@@ -895,10 +895,10 @@ function App() {
                 {view === 'seller-products' && <div className="nav-indicator"></div>}
               </div>
               <div className="nav-fab-container">
-                <div className="nav-fab" style={{ background: 'var(--primary)' }} onClick={() => setView('add-product')}>
+                <div className="nav-fab" style={{ background: 'linear-gradient(135deg, #22c55e 0%, #064e3b 100%)' }} onClick={() => setView('add-product')}>
                   <PlusCircle size={24} color="white" />
                 </div>
-                <span className="fab-label">Tambah</span>
+                <span className="fab-label" style={{ color: '#064e3b' }}>Tambah</span>
               </div>
               <div className={`nav-item ${view === 'seller-orders' ? 'active' : ''}`} onClick={() => setView('seller-orders')}>
                 <Inbox size={22} strokeWidth={view === 'seller-orders' ? 2.5 : 1.5} />
@@ -922,10 +922,10 @@ function App() {
                 {view === 'available-orders' && <div className="nav-indicator"></div>}
               </div>
               <div className="nav-fab-container">
-                <div className="nav-fab" style={{ background: 'var(--primary)' }} onClick={() => setView('courier-map')}>
+                <div className="nav-fab" style={{ background: 'linear-gradient(135deg, #f97316 0%, #991b1b 100%)' }} onClick={() => setView('courier-map')}>
                   <Navigation size={24} color="white" />
                 </div>
-                <span className="fab-label">Peta</span>
+                <span className="fab-label" style={{ color: '#991b1b' }}>Peta</span>
               </div>
               <div className={`nav-item ${view === 'wallet' ? 'active' : ''}`} onClick={() => {
                 setWalletRole('courier');

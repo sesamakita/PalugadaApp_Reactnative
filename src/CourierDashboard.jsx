@@ -57,6 +57,17 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
     // Helper: parse "Rp 15.000" → 15000
     const parseIncome = (str) => parseInt(str.replace(/[^0-9]/g, '')) || 0;
 
+    const getTaskTypeLabel = (type) => {
+        switch(type) {
+            case 'local': return '📦 Lokal';
+            case 'trans': return '🚛 Trans';
+            case 'jastip': return '🛍️ Jastip';
+            case 'ride': return '🏍️ Ojek';
+            case 'cargo': return '📦 Cargo';
+            default: return 'Lainnya';
+        }
+    };
+
     const grossDailyIncome = 65000;
     const netDailyIncome = grossDailyIncome - Math.round(grossDailyIncome * platformFeePercent);
 
@@ -70,14 +81,14 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
 
     const tasks = [
         { id: '#T-992', shop: 'Toko Batik Jaya', customer: 'Andi Pratama', status: 'Siap Pickup', type: 'local', income: 'Rp 15.000', shopAddr: 'Pasar Baru Blok A', custAddr: 'Jl. Ahmad Yani No. 10', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2504, lng: 112.7688, distance: '1.2 km' },
+        { id: '#J-042', shop: 'Pasar Masomba (Jastip)', customer: 'Ibu Rina', status: 'Siap Pickup', type: 'jastip', income: 'Rp 25.000', shopAddr: 'Palu Selatan', custAddr: 'Balaroa', shopPhone: '-', custPhone: '628111222333', lat: -0.9166, lng: 119.8833, distance: '3.5 km' },
         { id: '#T-991', shop: 'Warung Bu Siti', customer: 'Maya Sari', status: 'Dalam Antar', type: 'local', income: 'Rp 12.000', shopAddr: 'Jl. Mawar No. 4', custAddr: 'Jl. Sudirman Gg. 5', shopPhone: '628123456789', custPhone: '628987654321', lat: -7.2575, lng: 112.7521, distance: '2.5 km' },
-        { id: '#T-985', shop: 'Gudang Logistik Palu', customer: 'Toko Berkah Poso', status: 'Siap Pickup', type: 'trans', income: 'Rp 245.000', shopAddr: 'Kawasan Pergudangan Palu', custAddr: 'Jl. Trans Sulawesi, Poso', shopPhone: '628123456789', custPhone: '628987654321', lat: -1.4265, lng: 120.6588, distance: '35 km' },
     ];
 
     const marketTasks = [
         { id: '#T-999', shop: 'Nasi Kuning Ambon', customer: 'Budi Hartono', type: 'local', income: 'Rp 18.000', distance: '0.8 km', eta: '5 menit' },
-        { id: '#T-998', shop: 'Apotek Segar', customer: 'Rina Melati', type: 'local', income: 'Rp 10.000', distance: '1.5 km', eta: '8 menit' },
-        { id: '#T-997', shop: 'Mega Logistik', customer: 'Toko Maju Parigi', type: 'trans', income: 'Rp 180.000', distance: '12 km', eta: '25 menit' },
+        { id: '#R-112', shop: 'Titip Penumpang', customer: 'Bapak Ilham', type: 'ride', income: 'Rp 15.000', distance: '4.5 km', eta: '12 menit' },
+        { id: '#C-881', shop: 'Kargo Pindahan', customer: 'Toko Maju', type: 'cargo', income: 'Rp 150.000', distance: '12 km', eta: '25 menit' },
     ];
 
     const handleTaskClick = (task) => {
@@ -226,7 +237,7 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
                             <div className="order-header">
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span className="order-id" style={{ color: 'var(--courier-secondary)' }}>{task.id}</span>
-                                    <span className={`task-type-tag ${task.type}`}>{task.type === 'local' ? '📦 Lokal' : '🚛 Trans'}</span>
+                                    <span className={`task-type-tag ${task.type}`}>{getTaskTypeLabel(task.type)}</span>
                                 </div>
                                 <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>{task.status}</span>
                             </div>
@@ -261,7 +272,7 @@ const CourierDashboard = ({ onBack, onNavigate, activeView }) => {
                                     <span style={{ fontWeight: '800', fontSize: '14px' }}>{task.income}</span>
                                     <span className="distance-badge">{task.distance}</span>
                                 </div>
-                                <span className={`task-type-tag ${task.type}`}>{task.type === 'local' ? 'Lokal' : 'Trans'}</span>
+                                <span className={`task-type-tag ${task.type}`}>{getTaskTypeLabel(task.type).replace(/[^a-zA-Z\s]/g, '').trim()}</span>
                             </div>
                             <div style={{ fontSize: '13px', fontWeight: '600', marginBottom: '12px' }}>{task.shop} → {task.customer}</div>
                             <div style={{ display: 'flex', gap: '8px' }}>

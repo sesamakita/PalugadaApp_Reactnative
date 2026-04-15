@@ -506,6 +506,21 @@
     color: #7e22ce;
 }
 
+.task-type-tag.jastip {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.task-type-tag.ride {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.task-type-tag.cargo {
+    background: #dcfce7;
+    color: #15803d;
+}
+
 /* Review Section */
 .review-section {
     margin-bottom: 16px;

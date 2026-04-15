@@ -19,7 +19,10 @@ import {
   Navigation,
   LayoutDashboard,
   Bell,
-  Heart
+  Heart,
+  Bike,
+  Truck,
+  Store
 } from 'lucide-react'
 import { Geolocation } from '@capacitor/geolocation'
 import { App as CapApp } from '@capacitor/app'
@@ -55,6 +58,7 @@ import CourierProfile from './CourierProfile'
 import CourierCommunity from './CourierCommunity'
 import MyOrders from './MyOrders'
 import StoreList from './StoreList'
+import ServiceOrder from './ServiceOrder'
 
 const regionalMapping = {
   'Palu': 'Palu',
@@ -88,6 +92,7 @@ function App() {
   const [walletRole, setWalletRole] = useState('buyer') // 'buyer', 'seller', 'courier'
   const [walletBackView, setWalletBackView] = useState('profile') // view to go back to
   const [hasNotifications, setHasNotifications] = useState(false) // For conditional badge
+  const [selectedService, setSelectedService] = useState(null) // 'jastip', 'ride', 'cargo'
 
   // Mock wallet balance
   const walletBalance = 350000
@@ -238,6 +243,12 @@ function App() {
 
   const renderContent = () => {
     switch (view) {
+      case 'service-order':
+        return <ServiceOrder 
+          serviceType={selectedService} 
+          onBack={() => setView('home')}
+          onComplete={() => setView('tracking')}
+        />
       case 'tracking':
         return <Tracking onBack={() => setView('home')} />
       case 'seller':
@@ -596,6 +607,33 @@ function App() {
                   </svg>
                 </div>
               </div>
+              {/* Palugada Services Quick Menu */}
+              <div style={{ marginTop: '20px', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', margin: 0, color: 'var(--text-main)' }}>Layanan Palugada</h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                  <div className="glass-card" style={{ padding: '16px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer', background: 'linear-gradient(145deg, #f0f9ff 0%, #ffffff 100%)', border: '1px solid #e0f2fe' }} onClick={() => { setSelectedService('jastip'); setView('service-order'); }}>
+                    <div style={{ background: '#bae6fd', width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(2, 132, 199, 0.15)' }}>
+                      <Store size={22} color="#0284c7" strokeWidth={2.5} />
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: '800', textAlign: 'center', color: '#0c4a6e' }}>Titip Belanja</span>
+                  </div>
+                  <div className="glass-card" style={{ padding: '16px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer', background: 'linear-gradient(145deg, #fffbeb 0%, #ffffff 100%)', border: '1px solid #fef3c7' }} onClick={() => { setSelectedService('ride'); setView('service-order'); }}>
+                    <div style={{ background: '#fde68a', width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(217, 119, 6, 0.15)' }}>
+                      <Navigation size={22} color="#d97706" strokeWidth={2.5} />
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: '800', textAlign: 'center', color: '#78350f' }}>Antar Jemput</span>
+                  </div>
+                  <div className="glass-card" style={{ padding: '16px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer', background: 'linear-gradient(145deg, #f0fdf4 0%, #ffffff 100%)', border: '1px solid #dcfce7' }} onClick={() => { setSelectedService('cargo'); setView('service-order'); }}>
+                    <div style={{ background: '#bbf7d0', width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(22, 163, 74, 0.15)' }}>
+                      <Package size={22} color="#16a34a" strokeWidth={2.5} />
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: '800', textAlign: 'center', color: '#14532d' }}>Angkut Barang</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Categories */}
               <div className="categories" style={{ marginTop: '16px' }}>
                 {categories.map(cat => (
